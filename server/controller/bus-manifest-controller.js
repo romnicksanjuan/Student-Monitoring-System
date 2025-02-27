@@ -39,7 +39,7 @@ const getMnifest = async (req, res) => {
     try {
         const getManifestByBusCode = await BusManifest.findOne({ busCode })
         if (!getManifestByBusCode) {
-            res.json("No Manifest Created Yet")
+            res.json("Manifest Not Fpund")
             return
         }
         res.json(getManifestByBusCode)
