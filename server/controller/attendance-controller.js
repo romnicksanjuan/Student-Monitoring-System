@@ -1,12 +1,7 @@
 const BusAttendance = require("../model/attendance.js")
 const busManifest = require("../model/bus-manifest.js")
-const studentModel = require("../model/student-model")
-const { smsApi } = require("../controller/smsController.js")
-
-
-const accountSid = 'ACb04d5a4451ae767fdbbc002c27714980';
-const authToken = '5bb97736f3ec03d2d20494682593c828';
-const client = require('twilio')(accountSid, authToken);
+const studentModel = require("../model/student-model.js")
+const { smsApi } = require("./smsController.js")
 
 
 const attendance = async (req, res) => {
@@ -103,23 +98,6 @@ const attendance = async (req, res) => {
         console.log(error)
     }
 }
-
-
-
-// const sendSMS = async (body) => {
-//     try {
-//         const message = await client.messages
-//             .create({
-//                 body: body,
-//                 from: '+12694426956',
-//                 to: '+639624513047'
-//             })
-
-//         console.log(message.sid)
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
 
 
 
