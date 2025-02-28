@@ -52,11 +52,28 @@ const updateStudent = async (req, res) => {
 const getStudentList = async (req, res) => {
     try {
         const getAllStudent = await Student.find({})
+
         if (!getAllStudent) {
             res.json("No Student Created Yet")
             return
         }
+        console.log("count:", getAllStudent)
+        res.status(200).json(getAllStudent)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
+
+const studentCount = async (req, res) => {
+    try {
+        const getAllStudent = await Student.find({}).countDocuments()
+
+        if (!getAllStudent) {
+            res.json("No Student Created Yet")
+            return
+        }
+        console.log("count:", getAllStudent)
         res.status(200).json(getAllStudent)
     } catch (error) {
         console.log(error)
@@ -94,4 +111,4 @@ const deleteStudent = async (req, res) => {
     }
 }
 
-module.exports = { registerStudent, updateStudent, getStudentList, getStudentById, deleteStudent }
+module.exports = { registerStudent, updateStudent, getStudentList, getStudentById, deleteStudent, studentCount }

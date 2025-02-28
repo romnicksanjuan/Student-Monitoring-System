@@ -15,14 +15,15 @@ const attendance = async (req, res) => {
         if (!findStudent) {
             res.status(404).json({
                 success: false,
-                message: "Student ID is invalid",
-                resToArduino: "Student ID is invalid",
+                message: "Student Not Found",
+                resToArduino: "Student Not Found",
                 resCode: 404
             })
             return
         }
 
         const busManifestFindStudent = await busManifest.findOne({ busCode, studentList: findStudent.student_id })
+
         if (!busManifestFindStudent) {
             res.status(400).json({
                 success: false,
@@ -35,7 +36,7 @@ const attendance = async (req, res) => {
 
 
         let attendance = await BusAttendance.findOne({
-            busCode: busManifestFindStudent.busCode,
+            busCode: busCode,
             date: currentDate
         });
 
@@ -43,14 +44,15 @@ const attendance = async (req, res) => {
 
         if (!attendance) {
             // If no attendance record exists for the bus today, create a new one
+
+            isCheckIn = true
             attendance = new BusAttendance({
-                busCode: busManifestFindStudent.busCode,
+                busCode: busCode,
                 date: currentDate,
                 students: [{ studentId, time_In: new Date(), time_Out: null }],
             });
-            isCheckIn = true
-        } else {
 
+        } else {
             // Check if the student is already in the record
             const studentIndex = attendance.students.findIndex(
                 (s) => s.studentId === studentId
@@ -99,6 +101,26 @@ const attendance = async (req, res) => {
     }
 }
 
+// todays attenddance
+const todaySAttendance = async (req, res) => {
+    let today = new Date();
+    today.setHours(0, 0, 0, 0)
+
+    try {
+        const getAttendance = await BusAttendance.find({ createdAt: { $gte: today } }).select("students")
+
+        const total = getAttendance.reduce((total, manifest) => total + manifest.students.length, 0)
+
+        if (!getAttendance) {
+            res.status(400).json({ success: false, getAttendance })
+            return;
+        }
+        res.status(200).json({ success: true, total })
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 
 
-module.exports = { attendance }
+
+module.exports = { attendance, todaySAttendance }

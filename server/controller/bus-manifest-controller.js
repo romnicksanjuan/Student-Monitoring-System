@@ -1,6 +1,7 @@
 const crypto = require("crypto")
 const BusManifest = require("../model/bus-manifest.js")
 const studentModel = require("../model/student-model.js")
+const { response } = require("express")
 
 // create bus manifest
 const createManifest = async (req, res) => {
@@ -126,7 +127,24 @@ const removeStudentFromManifest = async (req, res) => {
         console.log(error)
     }
 }
+// bus manifest count
+const busManifestCount = async (req, res) => {
+    try {
+        const getBusManifestCount = await BusManifest.countDocuments()
+        if (!getBusManifestCount) {
+            console.log("No Bus Manifest Found")
+            return
+        }
+        res.status(200).json({ success: true, getBusManifestCount })
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 
-module.exports = { createManifest, getManifestList, getMnifest, updateManifest, manifestAddStudent, removeStudentFromManifest }
+module.exports = {
+    createManifest, getManifestList, getMnifest,
+    updateManifest, manifestAddStudent, removeStudentFromManifest,
+    busManifestCount
+}
