@@ -23,12 +23,12 @@ const registerStudent = async (req, res) => {
 
         const filepath = "tts.wav";
 
-        say.export(greet + lastname + firstInitial, "Microsoft Zira Desktop", 1.0, filepath, (err) => {
-            if (err) return console.error(err);
-            console.log("Audio saved!");
-        });
+        const tts = await generateTTS(greet, lastname, firstInitial, filepath)
 
-
+        if (!tts) {
+            console.log(tts)
+            return
+        }
         const audioBuffer = fs.readFileSync(filepath)
 
         console.log(audioBuffer)
@@ -42,7 +42,7 @@ const registerStudent = async (req, res) => {
 
         })
         const save = await newStudent.save()
-
+        // const filepath = "tts.wav";
         fs.unlinkSync(filepath)
         res.status(200).json({ message: "Student Registered Successfull", save })
     } catch (error) {
@@ -137,6 +137,16 @@ const deleteStudent = async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+}
+
+const generateTTS = (greet, lastname, firstInitial, filepath) => {
+    return new Promise((resolve, reject) => {
+        say.export(greet + lastname + firstInitial, "Microsoft Zira Desktop", 1.0, filepath, (err) => {
+            if (err) return reject(err);
+            console.log("Audio saved!");
+            resolve(true)
+        });
+    })
 }
 
 module.exports = { registerStudent, updateStudent, getStudentList, getStudentById, deleteStudent, studentCount }

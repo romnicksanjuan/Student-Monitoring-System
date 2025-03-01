@@ -1,6 +1,7 @@
 const BusAttendance = require("../model/attendance.js")
 const busManifest = require("../model/bus-manifest.js")
 const studentModel = require("../model/student-model.js")
+const { checkout } = require("../routes/route.js")
 const { smsApi } = require("./smsController.js")
 const { sendAudio } = require("./web-socket.js")
 
@@ -53,6 +54,8 @@ const attendance = async (req, res) => {
                 students: [{ studentId, time_In: new Date(), time_Out: null }],
             });
 
+
+
         } else {
             // Check if the student is already in the record
             const studentIndex = attendance.students.findIndex(
@@ -83,10 +86,17 @@ const attendance = async (req, res) => {
 
 
         }
-        const audio = findStudent.tts.data.toString("base64")
-        sendAudio(audio)
+        if (!isCheckIn) {
+            console.log("gggggg")
+        } else {
+            const audio = findStudent.tts.data.toString("base64")
+            // console.log(audio)
+
+            sendAudio(audio)
+        }
 
         const name = findStudent.firstname + " " + findStudent.lastname
+        console.log("full name:", name)
         const datee = new Date().toLocaleString("en-US", { timeZone: 'Asia/Manila', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })
         const message = `Hi Ma'am/Sir, This is to inform you that ${name} has ${isCheckIn ? 'got on' : 'got off'}  the bus on ${datee}`
 
