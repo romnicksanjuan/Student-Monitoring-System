@@ -87,7 +87,7 @@ const attendance = async (req, res) => {
         sendAudio(audio)
 
         const name = findStudent.firstname + " " + findStudent.lastname
-        const datee = new Date().toLocaleString("en-US", { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })
+        const datee = new Date().toLocaleString("en-US", { timeZone: 'Asia/Manila', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })
         const message = `Hi Ma'am/Sir, This is to inform you that ${name} has ${isCheckIn ? 'got on' : 'got off'}  the bus on ${datee}`
 
         smsApi(findStudent.guardian_mobile_number, message)
