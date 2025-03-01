@@ -51,7 +51,7 @@ const registerStudent = async (req, res) => {
         })
         const save = await newStudent.save()
         // const filepath = "tts.wav";
-        fs.unlinkSync(filepath)
+        // fs.unlinkSync(filepath)
         res.status(200).json({ message: "Student Registered Successfull", save })
     } catch (error) {
         console.log(error)

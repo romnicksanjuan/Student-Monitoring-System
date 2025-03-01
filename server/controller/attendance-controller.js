@@ -90,7 +90,7 @@ const attendance = async (req, res) => {
             console.log("gggggg")
         } else {
             const audio = findStudent.tts.data.toString("base64")
-            // console.log(audio)
+            // console.log("audio:::",audio)
 
             sendAudio(audio)
         }
