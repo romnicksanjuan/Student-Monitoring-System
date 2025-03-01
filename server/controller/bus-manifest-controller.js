@@ -1,7 +1,6 @@
 const crypto = require("crypto")
 const BusManifest = require("../model/bus-manifest.js")
 const studentModel = require("../model/student-model.js")
-const { response } = require("express")
 
 // create bus manifest
 const createManifest = async (req, res) => {

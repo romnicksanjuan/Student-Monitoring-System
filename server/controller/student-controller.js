@@ -1,4 +1,6 @@
 const Student = require('../model/student-model.js')
+const say = require("say")
+const fs = require("fs")
 
 const registerStudent = async (req, res) => {
     const { student_id,
@@ -14,8 +16,34 @@ const registerStudent = async (req, res) => {
         guardian_relationship,
         guardian_lastname } = req.body
     try {
-        const newStudent = new Student({ student_id, email, firstname, lastname, gender, date_of_birth, age, address, guardian_name, guardian_mobile_number, guardian_relationship, guardian_lastname })
+        const greet = "Hello, Welcome,";
+
+        const firstInitial = firstname.charAt(0)
+        console.log(greet, lastname, firstInitial)
+
+        const filepath = "tts.wav";
+
+        say.export(greet + lastname + firstInitial, "Microsoft Zira Desktop", 1.0, filepath, (err) => {
+            if (err) return console.error(err);
+            console.log("Audio saved!");
+        });
+
+
+        const audioBuffer = fs.readFileSync(filepath)
+
+        console.log(audioBuffer)
+        const newStudent = new Student({
+            student_id, email, firstname, lastname, gender, date_of_birth, age,
+            address, guardian_name, guardian_mobile_number, guardian_relationship,
+            guardian_lastname, tts: {
+                data: audioBuffer,
+                contentType: "audio/wav"
+            }
+
+        })
         const save = await newStudent.save()
+
+        fs.unlinkSync(filepath)
         res.status(200).json({ message: "Student Registered Successfull", save })
     } catch (error) {
         console.log(error)

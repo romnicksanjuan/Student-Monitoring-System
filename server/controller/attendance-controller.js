@@ -2,6 +2,7 @@ const BusAttendance = require("../model/attendance.js")
 const busManifest = require("../model/bus-manifest.js")
 const studentModel = require("../model/student-model.js")
 const { smsApi } = require("./smsController.js")
+const { sendAudio } = require("./web-socket.js")
 
 
 const attendance = async (req, res) => {
@@ -82,6 +83,8 @@ const attendance = async (req, res) => {
 
 
         }
+        const audio = findStudent.tts.data.toString("base64")
+        sendAudio(audio)
 
         const name = findStudent.firstname + " " + findStudent.lastname
         const datee = new Date().toLocaleString("en-US", { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })
