@@ -1,6 +1,8 @@
 const Student = require('../model/student-model.js')
 const say = require("say")
 const fs = require("fs")
+const googleTTS = require('google-tts-api');
+const axios = require("axios")
 
 const registerStudent = async (req, res) => {
     const { student_id,
@@ -18,12 +20,18 @@ const registerStudent = async (req, res) => {
     try {
         const greet = "Hello, Welcome,";
 
+        const lang = "en"; // Change to any supported language, e.g., "fil" for Filipino
+        const slow = false;
         const firstInitial = firstname.charAt(0)
-        console.log(greet, lastname, firstInitial)
 
-        const filepath = "tts.wav";
+        const ttsUrl = googleTTS.getAudioUrl(greet + lastname + firstInitial, { lang, slow });
 
-        const tts = await generateTTS(greet, lastname, firstInitial, filepath)
+        console.log("Generated TTS URL:", ttsUrl);
+        // console.log(greet, lastname, firstInitial)
+
+        const filepath = "output.mp3";
+        const tts = await downloadMP3(ttsUrl, filepath)
+        // const tts = await generateTTS(greet, lastname, firstInitial, filepath)
 
         if (!tts) {
             console.log(tts)
@@ -37,7 +45,7 @@ const registerStudent = async (req, res) => {
             address, guardian_name, guardian_mobile_number, guardian_relationship,
             guardian_lastname, tts: {
                 data: audioBuffer,
-                contentType: "audio/wav"
+                contentType: "audio/mp3"
             }
 
         })
@@ -139,14 +147,21 @@ const deleteStudent = async (req, res) => {
     }
 }
 
-const generateTTS = (greet, lastname, firstInitial, filepath) => {
+
+// Download MP3 file
+async function downloadMP3(url, filename) {
+    const response = await axios({
+        url,
+        method: 'GET',
+        responseType: 'stream',
+    });
+
+    response.data.pipe(fs.createWriteStream(filename));
+
     return new Promise((resolve, reject) => {
-        say.export(greet + lastname + firstInitial, "Microsoft Zira Desktop", 1.0, filepath, (err) => {
-            if (err) return reject(err);
-            console.log("Audio saved!");
-            resolve(true)
-        });
-    })
+        response.data.on('end', () => resolve(filename));
+        response.data.on('error', reject);
+    });
 }
 
 module.exports = { registerStudent, updateStudent, getStudentList, getStudentById, deleteStudent, studentCount }
