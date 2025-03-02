@@ -47,10 +47,15 @@ const BusManifest = () => {
                 <TopBar />
                 <div className="p-5">
                     {/* <h2 className="text-center text-3xl mb-3">Bus Manifest</h2> */}
+                    <div className="w-full my-3 flex justify-end">
+                      
+                        <button className="h-10 w-25 text-md text-white bg-gray-900 rounded-md">Create</button>
 
+                    </div>
+                    <h2 className="text-xl text-gray-900 font-bold">Bus Manifest List</h2>
                     <table className="w-full border-collapse border border-gray-300 mt-3">
                         <thead>
-                            <tr className="bg-gray-200">
+                            <tr className="bg-gray-200 cursor-pointer">
                                 <th className="border border-gray-300 px-4 py-2 text-left">Bus Code</th>
                                 <th className="border border-gray-300 px-4 py-2 text-left">Driver Name</th>
                                 <th className="border border-gray-300 px-4 py-2 text-left">Bus Plate Number</th>

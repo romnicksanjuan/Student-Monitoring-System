@@ -1,8 +1,9 @@
 const Student = require('../model/student-model.js')
-const say = require("say")
+// const say = require("say")
 const fs = require("fs")
 const googleTTS = require('google-tts-api');
-const axios = require("axios")
+const axios = require("axios");
+const path = require('path');
 
 const registerStudent = async (req, res) => {
     const { student_id,
@@ -19,13 +20,18 @@ const registerStudent = async (req, res) => {
         guardian_lastname } = req.body
     try {
         const greet = "Hello, Welcome,";
-
+        const bye = "Thank You, Good Bye"
         const lang = "en"; // Change to any supported language, e.g., "fil" for Filipino
         const slow = false;
         const firstInitial = firstname.charAt(0)
 
-        const ttsUrl = googleTTS.getAudioUrl(greet + lastname + firstInitial, { lang, slow });
+        const ttsUrl = googleTTS.getAudioUrl(greet + lastname + firstInitial, { lang: "en", slow: false });
+        const base64 = await googleTTS.getAudioBase64(bye + lastname + firstInitial, { lang: "en", slow: false })
 
+        const buffer = Buffer.from(base64, "base64")
+
+        const time_Out_Filepath = "time-out-audio.mp3"
+        fs.writeFileSync(time_Out_Filepath, buffer)
         console.log("Generated TTS URL:", ttsUrl);
         // console.log(greet, lastname, firstInitial)
 
@@ -43,21 +49,27 @@ const registerStudent = async (req, res) => {
         const newStudent = new Student({
             student_id, email, firstname, lastname, gender, date_of_birth, age,
             address, guardian_name, guardian_mobile_number, guardian_relationship,
-            guardian_lastname, tts: {
+            guardian_lastname,
+            tts: {
                 data: audioBuffer,
+                contentType: "audio/mp3"
+            },
+            tts_out: {
+                data: buffer,
                 contentType: "audio/mp3"
             }
 
         })
-        const save = await newStudent.save()
+        await newStudent.save()
         // const filepath = "tts.wav";
         fs.unlinkSync(filepath)
-        res.status(200).json({ message: "Student Registered Successfull", save })
+        res.status(200).json({ message: "Student Registered Successfull" })
     } catch (error) {
         console.log(error)
     }
 }
 
+// update student
 const updateStudent = async (req, res) => {
     const { id } = req.params
     const { student_id, email, firstname, lastname, gender, date_of_birth, age, address, guardian_name, guadian_mobile_number, guardian_relationship, guardian_lastname } = req.body
@@ -164,4 +176,22 @@ async function downloadMP3(url, filename) {
     });
 }
 
-module.exports = { registerStudent, updateStudent, getStudentList, getStudentById, deleteStudent, studentCount }
+// search student
+const searchStudent = async (req, res) => {
+    const { firstname } = req.query
+
+    try {
+        const search = await Student.find({ firstname: new RegExp(firstname, "i") })
+
+        res.status(200).json(search)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
+module.exports = {
+    registerStudent, updateStudent, getStudentList, getStudentById, deleteStudent, studentCount,
+    searchStudent
+}

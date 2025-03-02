@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DOMAIN from "../config/config";
 import { useNavigate } from "react-router-dom";
 import { decodeToken } from "./DecodeToken";
+import adminBG from "../images/adminBG.jpg"
 
 const Login = () => {
     const navigate = useNavigate()
@@ -56,8 +57,9 @@ const Login = () => {
 
 
     return (
-        <div className="h-screen w-full xl:bg-yellow-500 xl:flex xl:justify-center xl:items-center ">
-            <form onSubmit={handleSubmit} className="xl:bg-white xl:p-4 xl:border xl:rounded-md xl:w-xl ">
+        <div className="h-screen w-ful xl:flex xl:justify-center xl:items-center bg-contain bg-center"
+            style={{ backgroundImage: `url(${adminBG})` }}>
+            <form onSubmit={handleSubmit} className="xl:bg-white/50 xl:p-4 xl:border-2 border-amber-900 xl:rounded-md xl:w-xl ">
                 <h2 className="xl:text-2xl xl:text-bold xl:text-center">Login User</h2>
                 {errorMessage ? <p className="text-white text-center bg-red-500 py-1 text-lg">{errorMessage}</p> : ""}
 
@@ -67,7 +69,7 @@ const Login = () => {
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="border p-2 w-full"
+                        className="border border-amber-900 p-2 w-full rounded-md mb-5"
                     />
                 </label>
 
@@ -77,11 +79,11 @@ const Login = () => {
                         type="text"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="border p-2 w-full"
+                        className="border border-amber-900 p-2 w-full rounded-md"
                     />
                 </label>
 
-                <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded-md">
+                <button type="submit" className="bg-gray-700 hover:bg-gray-900  text-white p-2 w-full rounded-md cursor-pointer">
                     Submit
                 </button>
             </form>

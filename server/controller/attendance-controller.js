@@ -10,7 +10,9 @@ const attendance = async (req, res) => {
     const { studentId, busCode } = req.body
 
     console.log(studentId, busCode)
-    const currentDate = new Date().setHours(0, 0, 0, 0);
+    const currentDate = new Date()
+    currentDate.setHours(0, 0, 0, 0);
+
     // console.log("currentDate:", currentDate)
     try {
         const findStudent = await studentModel.findOne({ student_id: studentId })
@@ -24,7 +26,10 @@ const attendance = async (req, res) => {
             return
         }
 
-        const busManifestFindStudent = await busManifest.findOne({ busCode, studentList: findStudent.student_id })
+        const busManifestFindStudent = await busManifest.findOne({
+            busCode, studentList: findStudent.student_id,
+            // createdAt: { $gte: currentDate, $lt: new Date(currentDate.getTime() + 24 * 60 * 60 * 1000) }
+        })
 
         if (!busManifestFindStudent) {
             res.status(400).json({
@@ -39,7 +44,7 @@ const attendance = async (req, res) => {
 
         let attendance = await BusAttendance.findOne({
             busCode: busCode,
-            date: currentDate
+            date: { $gte: currentDate, $lt: new Date(currentDate.getTime() + 24 * 60 * 60 * 1000) } 
         });
 
         let isCheckIn = false
@@ -50,7 +55,7 @@ const attendance = async (req, res) => {
             isCheckIn = true
             attendance = new BusAttendance({
                 busCode: busCode,
-                date: currentDate,
+                date: new Date(currentDate),
                 students: [{ studentId, time_In: new Date(), time_Out: null }],
             });
 
@@ -87,11 +92,11 @@ const attendance = async (req, res) => {
 
         }
         if (!isCheckIn) {
-            console.log("gggggg")
+            const time_Out_Audio = findStudent.tts_out.data.toString("base64")
+            sendAudio(time_Out_Audio)
         } else {
             const audio = findStudent.tts.data.toString("base64")
             // console.log("audio:::",audio)
-
             sendAudio(audio)
         }
 
@@ -114,7 +119,7 @@ const attendance = async (req, res) => {
     }
 }
 
-// todays attenddance
+// todays attenddance count
 const todaySAttendance = async (req, res) => {
     let today = new Date();
     today.setHours(0, 0, 0, 0)
@@ -134,6 +139,52 @@ const todaySAttendance = async (req, res) => {
     }
 }
 
+// attendance for today
+const getAttendance = async (req, res) => {
+    const { date } = req.params
+
+    console.log("date:", date)
+    const startDate = new Date(date)
+    startDate.setHours(0, 0, 0, 0)
+
+    const endDate = new Date(startDate);
+    endDate.setHours(23, 59, 59, 999);
+    try {
+        const get_attendance = await BusAttendance.findOne({ createdAt: { $gte: startDate, $lt: endDate } })
+
+        if (!get_attendance) {
+            return res
+        }
+
+        const StudentID = get_attendance.students.map((studID) => ({
+            studentId: studID.studentId,
+            time_In: studID.time_In,
+            time_out: studID.time_Out
+        }))
+
+        const Students = await studentModel.find({ student_id: StudentID.map(s => s.studentId) })
+
+        // console.log(Students)
+
+        const data = Students.map((s) => {
+
+            const findStudID = StudentID.find(a => a.studentId.toString() === s.student_id.toString())
+            return {
+                student_id: s.student_id,
+                first_name: s.firstname,
+                last_name: s.lastname,
+                time_In: findStudID.time_In,
+                time_out: findStudID.time_out,
+            }
+        })
+        // console.log(data)
+        res.status(200).json(data)
+
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
-module.exports = { attendance, todaySAttendance }
+
+module.exports = { attendance, todaySAttendance, getAttendance }

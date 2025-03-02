@@ -1,8 +1,8 @@
 const express = require('express')
-const { registerStudent, updateStudent, getStudentList, getStudentById, deleteStudent, studentCount } = require('../controller/student-controller.js')
+const { registerStudent, updateStudent, getStudentList, getStudentById, deleteStudent, studentCount, searchStudent } = require('../controller/student-controller.js')
 const { createUser, loginUser, userListByRole, getUserByEmail, updateUser, deleteUser, changePassoword } = require('../controller/user-controller.js')
 const { createManifest, getManifestList, getMnifest, updateManifest, manifestAddStudent, removeStudentFromManifest, busManifestCount } = require('../controller/bus-manifest-controller.js')
-const { attendance, todaySAttendance } = require('../controller/attendance-controller.js')
+const { attendance, todaySAttendance, getAttendance } = require('../controller/attendance-controller.js')
 const test = require('../controller/arduino.js')
 
 const router = express.Router()
@@ -19,6 +19,8 @@ router.get("/student/:studentId", getStudentById)
 router.delete("/student/delete/:studentId", deleteStudent)
 // students count
 router.get("/students-count", studentCount)
+// search student
+router.get('/query/student', searchStudent)
 
 // create user
 router.post('/user/create', createUser)
@@ -56,7 +58,8 @@ router.get("/bus-manifest-count", busManifestCount)
 router.post("/bus-manifest/student/attendance", attendance)
 // attendance count
 router.get("/today-attendance", todaySAttendance)
-
+// get attendance
+router.get("/attendance/:date", getAttendance)
 
 
 // arduino test

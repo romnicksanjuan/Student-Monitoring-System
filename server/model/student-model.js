@@ -16,6 +16,10 @@ const studentSchema = new mongoose.Schema({
     tts: {
         data: { type: Buffer },
         contentType: { type: String }
+    },
+    tts_out: {
+        data: { type: Buffer },
+        contentType: { type: String }
     }
 }, { timestamps: true })
 
