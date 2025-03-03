@@ -3,6 +3,7 @@ import SideBar from "../SideBar";
 import TopBar from "../TopBar";
 import DOMAIN from "../../config/config";
 import { useNavigate } from "react-router-dom";
+import { MdCancel } from "react-icons/md";
 
 interface GetStudents {
   address: string;
@@ -117,7 +118,9 @@ const Students = () => {
         <div className="absolute z-10 bg-white w-2xl top-1/2 left-1/2 -translate-y-1/2 rounded-md
       -translate-x-1/2 py-10 px-5 border-2 border-gray-900">
 
-          <button onClick={() => setIsClick(!isClick)} className="font-bold text-2xl absolute right-2 top-2 p-2 cursor-pointer">x</button>
+          <button onClick={() => setIsClick(!isClick)} className="font-bold text-2xl absolute right-2 top-2 p-2 cursor-pointer">
+            <MdCancel size={25} />
+          </button>
 
           <h2 className="text-2xl font-bold mb-4">Student Details</h2>
 
