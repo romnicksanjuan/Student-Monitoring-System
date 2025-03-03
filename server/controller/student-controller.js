@@ -115,7 +115,7 @@ const getStudentList = async (req, res) => {
                 date_of_birth: date
             }
         })
-        console.log("count:", stud)
+        // console.log("count:", stud)
         res.status(200).json(stud)
     } catch (error) {
         console.log(error)
@@ -131,7 +131,7 @@ const studentCount = async (req, res) => {
             res.json("No Student Created Yet")
             return
         }
-        console.log("count:", getAllStudent)
+        // console.log("count:", getAllStudent)
         res.status(200).json(getAllStudent)
     } catch (error) {
         console.log(error)

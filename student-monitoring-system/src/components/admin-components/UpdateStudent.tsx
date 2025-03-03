@@ -61,7 +61,7 @@ const UpdateStudent = () => {
 
     return (
         <div className="flex justify-center h-screen">
-            <div className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-lg border-2">
+            <div className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-lg border-2 h-auto">
                 <h2 className="text-2xl font-bold mb-4">Student Update Form</h2>
 
                 {message ? <h2 className="text-lg text-center bg-green-500 py-2 my-2.5 rounded-md">{message}</h2> : ''}
