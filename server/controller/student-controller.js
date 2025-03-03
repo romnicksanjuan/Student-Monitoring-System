@@ -41,6 +41,13 @@ const registerStudent = async (req, res) => {
         const time_in = await downloadMP3(ttsUrl_in, filename_time_in)
         const time_out = await downloadMP3(ttsUrl_out, filename_time_out)
 
+        if (!time_in) {
+            return
+        }
+
+        if (!time_out) {
+            return
+        }
 
         const time_in_buffer = fs.readFileSync(filename_time_in)
         const time_out_buffer = fs.readFileSync(filename_time_out)
