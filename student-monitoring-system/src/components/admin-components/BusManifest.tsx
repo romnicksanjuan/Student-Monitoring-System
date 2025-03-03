@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import SideBar from "../SideBar"
 import TopBar from "../TopBar"
 import DOMAIN from "../../config/config.ts"
+import { useNavigate } from "react-router-dom"
 
 interface Manifest {
     busCapacity: number;
@@ -15,6 +16,8 @@ interface Manifest {
 
 
 const BusManifest = () => {
+    const navigate = useNavigate()
+
     const [manifest, setManifest] = useState<Manifest[]>([])
 
 
@@ -30,8 +33,6 @@ const BusManifest = () => {
                     console.log(response.statusText)
                     return
                 }
-
-                console.log(data)
                 setManifest(data)
             } catch (error) {
                 console.log(error)
@@ -49,7 +50,7 @@ const BusManifest = () => {
                     {/* <h2 className="text-center text-3xl mb-3">Bus Manifest</h2> */}
                     <div className="w-full my-3 flex justify-end">
                       
-                        <button className="h-10 w-25 text-md text-white bg-gray-900 rounded-md">Create</button>
+                        <button className="h-10 w-25 text-md text-white bg-gray-900 rounded-md" onClick={() => navigate("/manifest/create")}>Create</button>
 
                     </div>
                     <h2 className="text-xl text-gray-900 font-bold">Bus Manifest List</h2>

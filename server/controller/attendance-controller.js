@@ -44,7 +44,7 @@ const attendance = async (req, res) => {
 
         let attendance = await BusAttendance.findOne({
             busCode: busCode,
-            date: { $gte: currentDate, $lt: new Date(currentDate.getTime() + 24 * 60 * 60 * 1000) } 
+            date: { $gte: currentDate, $lt: new Date(currentDate.getTime() + 24 * 60 * 60 * 1000) }
         });
 
         let isCheckIn = false
@@ -151,15 +151,16 @@ const getAttendance = async (req, res) => {
     endDate.setHours(23, 59, 59, 999);
     try {
         const get_attendance = await BusAttendance.findOne({ createdAt: { $gte: startDate, $lt: endDate } })
+        console.log("tessssssssst:", get_attendance)
 
         if (!get_attendance) {
-            return res
+            return res.status(404).json("No Record")
         }
 
         const StudentID = get_attendance.students.map((studID) => ({
             studentId: studID.studentId,
             time_In: studID.time_In,
-            time_out: studID.time_Out
+            time_Out: studID.time_Out
         }))
 
         const Students = await studentModel.find({ student_id: StudentID.map(s => s.studentId) })
@@ -173,8 +174,8 @@ const getAttendance = async (req, res) => {
                 student_id: s.student_id,
                 first_name: s.firstname,
                 last_name: s.lastname,
-                time_In: findStudID.time_In,
-                time_out: findStudID.time_out,
+                time_In: new Date(findStudID.time_In).toLocaleString("en-US", { timeZone: "Asia/Manila", year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric" }),
+                time_Out: new Date(findStudID.time_Out).toLocaleString("en-US", { timeZone: "Asia/Manila", year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric" }),
             }
         })
         // console.log(data)

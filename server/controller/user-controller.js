@@ -150,7 +150,35 @@ const changePassoword = async (req, res) => {
     }
 }
 
+const forgotPassword = async (req, res) => {
+    const { email, newPassword, confirmPassword } = req.body
+    console.log(email, newPassword, confirmPassword)
+    try {
+        const findByEmail = await User.findOne({ email })
+
+        // console.log(findByEmail)
+        
+        if (!findByEmail) {
+            res.status(404).json("Email not found")
+            return
+        }
+
+        if (newPassword !== confirmPassword) {
+            res.status(400).json("New Password and Confirm Password doesn't match")
+            return
+        }
+        const changePassoword = await User.findOneAndUpdate({ email }, { password: newPassword },  // Update
+            { new: true }) // Return the updated document)
+
+        console.log(changePassoword)
+
+        res.status(200).json("Password Reset Successfull")
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     createUser, loginUser, userListByRole, getUserByEmail,
-    updateUser, deleteUser, changePassoword
+    updateUser, deleteUser, changePassoword, forgotPassword
 }

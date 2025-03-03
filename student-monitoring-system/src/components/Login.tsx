@@ -82,7 +82,7 @@ const Login = () => {
                         className="border border-amber-900 p-2 w-full rounded-md"
                     />
                 </label>
-
+                <p onClick={() => navigate("/admin/forgot-password")} className="text-md my-2 cursor-pointer">Forgot Password</p>
                 <button type="submit" className="bg-gray-700 hover:bg-gray-900  text-white p-2 w-full rounded-md cursor-pointer">
                     Submit
                 </button>

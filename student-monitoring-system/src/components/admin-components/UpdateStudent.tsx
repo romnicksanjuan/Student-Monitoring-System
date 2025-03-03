@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DOMAIN from "../../config/config";
 
-const StudentForm = () => {
+const UpdateStudent = () => {
     const [message, setMessage] = useState<string>("")
     const [formData, setFormData] = useState({
         student_id: "",
@@ -81,4 +81,4 @@ const StudentForm = () => {
     );
 };
 
-export default StudentForm;
+export default UpdateStudent;

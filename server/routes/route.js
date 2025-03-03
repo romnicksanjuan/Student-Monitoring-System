@@ -1,6 +1,6 @@
 const express = require('express')
 const { registerStudent, updateStudent, getStudentList, getStudentById, deleteStudent, studentCount, searchStudent } = require('../controller/student-controller.js')
-const { createUser, loginUser, userListByRole, getUserByEmail, updateUser, deleteUser, changePassoword } = require('../controller/user-controller.js')
+const { createUser, loginUser, userListByRole, getUserByEmail, updateUser, deleteUser, changePassoword, forgotPassword } = require('../controller/user-controller.js')
 const { createManifest, getManifestList, getMnifest, updateManifest, manifestAddStudent, removeStudentFromManifest, busManifestCount } = require('../controller/bus-manifest-controller.js')
 const { attendance, todaySAttendance, getAttendance } = require('../controller/attendance-controller.js')
 const test = require('../controller/arduino.js')
@@ -36,6 +36,8 @@ router.put("/user/update/:id", updateUser)
 router.delete("/user/delete/:id", deleteUser)
 // user change password
 router.post("/user/change-password", changePassoword)
+// forgot password
+router.post("/forgot-password", forgotPassword)
 
 
 // create manifest

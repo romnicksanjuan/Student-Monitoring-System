@@ -1,9 +1,9 @@
 const Student = require('../model/student-model.js')
 // const say = require("say")
-const fs = require("fs")
+// const fs = require("fs")
 const googleTTS = require('google-tts-api');
-const axios = require("axios");
-const path = require('path');
+// const axios = require("axios");
+// const path = require('path');
 
 const registerStudent = async (req, res) => {
     const { student_id,
@@ -12,46 +12,52 @@ const registerStudent = async (req, res) => {
         date_of_birth,
         gender,
         age,
+        strand,
         address,
         email,
         guardian_name,
         guardian_mobile_number,
         guardian_relationship,
         guardian_lastname } = req.body
+
+        // const formData = req.body
+
+        // console.log("form data:", formData.email)
     try {
+
+
+        const birth_date = new Date(date_of_birth).toLocaleString("en-US", { timeZone: 'Asia/Manila', year: "numeric", day: 'numeric', month: 'long' })
+        // console.log(birth_date)
         const greet = "Hello, Welcome,";
         const bye = "Thank You, Good Bye"
-        const lang = "en"; // Change to any supported language, e.g., "fil" for Filipino
-        const slow = false;
         const firstInitial = firstname.charAt(0)
 
-        const ttsUrl = googleTTS.getAudioUrl(greet + lastname + firstInitial, { lang: "en", slow: false });
+        const ttsUrl = await googleTTS.getAudioBase64(greet + lastname + firstInitial, { lang: "en", slow: false });
         const base64 = await googleTTS.getAudioBase64(bye + lastname + firstInitial, { lang: "en", slow: false })
 
         const buffer = Buffer.from(base64, "base64")
+        const time_in_buffer = Buffer.from(ttsUrl, "base64")
 
-        const time_Out_Filepath = "time-out-audio.mp3"
-        fs.writeFileSync(time_Out_Filepath, buffer)
-        console.log("Generated TTS URL:", ttsUrl);
+        // const time_in_Filepath = "time-in-audio.mp3"
+        // const time_Out_Filepath = "time-out-audio.mp3"
+        // fs.writeFileSync(time_Out_Filepath, buffer)
+        // fs.writeFileSync(time_in_Filepath, time_in_buffer)
+
+
+        // console.log("Generated TTS URL:", ttsUrl);
         // console.log(greet, lastname, firstInitial)
 
-        const filepath = "output.mp3";
-        const tts = await downloadMP3(ttsUrl, filepath)
         // const tts = await generateTTS(greet, lastname, firstInitial, filepath)
 
-        if (!tts) {
-            console.log(tts)
-            return
-        }
-        const audioBuffer = fs.readFileSync(filepath)
+ 
 
-        console.log(audioBuffer)
+        // console.log(audioBuffer)
         const newStudent = new Student({
-            student_id, email, firstname, lastname, gender, date_of_birth, age,
+            student_id, email, firstname, lastname, gender, date_of_birth: birth_date, age, strand,
             address, guardian_name, guardian_mobile_number, guardian_relationship,
             guardian_lastname,
             tts: {
-                data: audioBuffer,
+                data: time_in_buffer,
                 contentType: "audio/mp3"
             },
             tts_out: {
@@ -62,7 +68,6 @@ const registerStudent = async (req, res) => {
         })
         await newStudent.save()
         // const filepath = "tts.wav";
-        fs.unlinkSync(filepath)
         res.status(200).json({ message: "Student Registered Successfull" })
     } catch (error) {
         console.log(error)
@@ -99,14 +104,22 @@ const updateStudent = async (req, res) => {
 // get student list
 const getStudentList = async (req, res) => {
     try {
-        const getAllStudent = await Student.find({})
+        const getAllStudent = await Student.find({}).lean()
 
         if (!getAllStudent) {
             res.json("No Student Created Yet")
             return
         }
-        console.log("count:", getAllStudent)
-        res.status(200).json(getAllStudent)
+
+        const stud = getAllStudent.map((s) => {
+            const date = new Date(s.date_of_birth).toLocaleString("en-US", { timeZone: "Asia/Manila", year: "2-digit", month: 'long', day: "2-digit" })
+            return{
+                ...s,
+                date_of_birth: date
+            }
+        })
+        console.log("count:", stud)
+        res.status(200).json(stud)
     } catch (error) {
         console.log(error)
     }
@@ -161,29 +174,34 @@ const deleteStudent = async (req, res) => {
 
 
 // Download MP3 file
-async function downloadMP3(url, filename) {
-    const response = await axios({
-        url,
-        method: 'GET',
-        responseType: 'stream',
-    });
+// async function downloadMP3(url, filename) {
+//     const response = await axios({
+//         url,
+//         method: 'GET',
+//         responseType: 'stream',
+//     });
 
-    response.data.pipe(fs.createWriteStream(filename));
+//     response.data.pipe(fs.createWriteStream(filename));
 
-    return new Promise((resolve, reject) => {
-        response.data.on('end', () => resolve(filename));
-        response.data.on('error', reject);
-    });
-}
+//     return new Promise((resolve, reject) => {
+//         response.data.on('end', () => resolve(filename));
+//         response.data.on('error', reject);
+//     });
+// }
 
 // search student
 const searchStudent = async (req, res) => {
     const { firstname } = req.query
 
     try {
-        const search = await Student.find({ firstname: new RegExp(firstname, "i") })
+        const search = await Student.find({ firstname: new RegExp(firstname, "i") }).lean()
 
-        res.status(200).json(search)
+        const s = search.map((s) => ({
+            ...s,
+            date_of_birth:new Date(s.date_of_birth).toLocaleString("en-US", {timeZone:"Asia/Manila", year:"numeric", day:"numeric", month:"long"})
+        }))
+
+        res.status(200).json(s)
     } catch (error) {
         console.log(error)
     }
