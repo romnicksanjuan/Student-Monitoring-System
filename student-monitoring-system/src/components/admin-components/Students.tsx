@@ -114,7 +114,7 @@ const Students = () => {
 
 
       {isClick ?
-        <div className="absolute bg-white w-2xl top-1/2 left-1/2 -translate-y-1/2 rounded-md
+        <div className="absolute z-10 bg-white w-2xl top-1/2 left-1/2 -translate-y-1/2 rounded-md
       -translate-x-1/2 py-10 px-5 border-2 border-gray-900">
 
           <button onClick={() => setIsClick(!isClick)} className="font-bold text-2xl absolute right-2 top-2 p-2 cursor-pointer">x</button>
