@@ -43,7 +43,7 @@ const registerStudent = async (req, res) => {
 
 
         const time_in_buffer = fs.readFileSync(filename_time_in)
-        const time_out_buffer = fs.readFileSync(filename_time_in)
+        const time_out_buffer = fs.readFileSync(filename_time_out)
         // console.log(time_in_buffer)
 
         const newStudent = new Student({
