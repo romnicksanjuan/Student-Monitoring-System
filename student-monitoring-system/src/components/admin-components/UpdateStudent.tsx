@@ -65,7 +65,7 @@ const UpdateStudent = () => {
                 <h2 className="text-2xl font-bold mb-4">Student Update Form</h2>
 
                 {message ? <h2 className="text-lg text-center bg-green-500 py-2 my-2.5 rounded-md">{message}</h2> : ''}
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4 h-auto">
                     <input type="text" name="student_id" placeholder="Student ID" value={formData.student_id} onChange={handleChange} className="w-full p-2 border rounded" />
                     <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="w-full p-2 border rounded" />
                     <input type="text" name="firstname" placeholder="First Name" value={formData.firstname} onChange={handleChange} required className="w-full p-2 border rounded" />
