@@ -75,15 +75,39 @@ const Students = () => {
   }
 
 
-
+  // update student
   const studentDetails = (id: string) => {
     console.log(id)
     setIsClick(!isClick)
 
-    const test = studentList.find(s => s._id.toString() === id)
+    const stud = studentList.find(s => s._id.toString() === id)
 
-    setStudent(test ?? null)
-    console.log("test: ", test)
+    setStudent(stud ?? null)
+    // console.log("test: ", test)
+  }
+
+
+
+  // delete student
+  const delStudent = async (id?: string) => {
+
+    console.log(id)
+    try {
+      const response = await fetch(`${DOMAIN}/student/delete/${id}`,{
+        method:'DELETE'
+      })
+
+      if (!response.ok) {
+        return
+      }
+
+      const data = await response.json()
+      console.log(data)
+      setStudentList(studentList.filter(prev => prev._id.toString() !== id))
+      setIsClick(!isClick)
+    } catch (error) {
+      console.log(error)
+    }
   }
   return (
     <div className="flex min-h-screen w-full relative">
@@ -133,10 +157,10 @@ const Students = () => {
           <h2 className="font-bold text-lg">Guardian Mobile Number:
             <span className="font-normal text-lg ml-2 text-gray-600">{student?.guardian_mobile_number}</span></h2>
 
-            <div className="w-full flex justify-around mt-5">
-              <button onClick={() => navigate("/update-student")} className="bg-amber-500 hover:bg-amber-600 text-black text-xl w-40 px-5 py-2 border rounded-md">Update</button>
-              <button className="bg-red-500 hover:bg-red-600 text-black text-xl w-40 px-5 py-2 border rounded-md">Delete</button>
-            </div>
+          <div className="w-full flex justify-around mt-5">
+            <button onClick={() => navigate("/update-student", { state: student })} className="bg-amber-500 hover:bg-amber-600 text-black text-xl w-40 px-5 py-2 border rounded-md">Update</button>
+            <button onClick={() => delStudent(student?._id.toString())} className="bg-red-500 hover:bg-red-600 text-black text-xl w-40 px-5 py-2 border rounded-md">Delete</button>
+          </div>
         </div>
         : ""}
 

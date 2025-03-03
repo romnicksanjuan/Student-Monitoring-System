@@ -1,22 +1,29 @@
 import { useState } from "react";
 import DOMAIN from "../../config/config";
+import { useLocation } from "react-router-dom";
 
 const UpdateStudent = () => {
+    const location = useLocation()
+
+    const student = location.state
+
+    console.log("student", student.guardian_mobile_number)
+
     const [message, setMessage] = useState<string>("")
     const [formData, setFormData] = useState({
-        student_id: "",
-        email: "",
-        firstname: "",
-        lastname: "",
-        gender: "",
-        date_of_birth: "",
-        age: "",
-        strand: "",
-        address: "",
-        guardian_name: "",
-        guardian_mobile_number: "",
-        guardian_relationship: "",
-        guardian_lastname: "",
+        student_id: student.student_id,
+        email: student.email,
+        firstname: student.firstname,
+        lastname: student.lastname,
+        gender: student.gender,
+        date_of_birth:  new Date(student.date_of_birth).toLocaleDateString('en-CA'),
+        age: student.age,
+        strand: student.strand,
+        address: student.address,
+        guardian_name: student.guardian_name,
+        guardian_mobile_number: student.guardian_mobile_number,
+        guardian_relationship: student.guardian_relationship,
+        guardian_lastname: student.guardian_lastname,
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -30,8 +37,8 @@ const UpdateStudent = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${DOMAIN}/student/create`, {
-                method: "POST",
+            const response = await fetch(`${DOMAIN}/student/update/${student._id}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -45,6 +52,7 @@ const UpdateStudent = () => {
 
             const data = await response.json()
             setMessage(data.message)
+
         } catch (error) {
             console.log(error)
         }
@@ -53,9 +61,9 @@ const UpdateStudent = () => {
 
     return (
         <div className="flex justify-center items-center h-screen">
-            <div className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-                <h2 className="text-2xl font-bold mb-4">Student Registration Form</h2>
-                {message ? <h2 className="text-lg text-center bg-green-500 py-2 my-2.5 rounded-md">{message}</h2> :''}
+            <div className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-lg border-2">
+                <h2 className="text-2xl font-bold mb-4">Student Update Form</h2>
+                {message ? <h2 className="text-lg text-center bg-green-500 py-2 my-2.5 rounded-md">{message}</h2> : ''}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <input type="text" name="student_id" placeholder="Student ID" value={formData.student_id} onChange={handleChange} className="w-full p-2 border rounded" />
                     <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="w-full p-2 border rounded" />

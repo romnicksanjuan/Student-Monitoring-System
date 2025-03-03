@@ -20,9 +20,9 @@ const registerStudent = async (req, res) => {
         guardian_relationship,
         guardian_lastname } = req.body
 
-        // const formData = req.body
+    // const formData = req.body
 
-        // console.log("form data:", formData.email)
+    // console.log("form data:", formData.email)
     try {
 
 
@@ -49,7 +49,7 @@ const registerStudent = async (req, res) => {
 
         // const tts = await generateTTS(greet, lastname, firstInitial, filepath)
 
- 
+
 
         // console.log(audioBuffer)
         const newStudent = new Student({
@@ -77,7 +77,9 @@ const registerStudent = async (req, res) => {
 // update student
 const updateStudent = async (req, res) => {
     const { id } = req.params
-    const { student_id, email, firstname, lastname, gender, date_of_birth, age, address, guardian_name, guadian_mobile_number, guardian_relationship, guardian_lastname } = req.body
+    const { student_id, email, firstname, lastname, gender, date_of_birth, age, address, guardian_name, guardian_mobile_number, guardian_relationship, guardian_lastname } = req.body
+  console.log("numberrrrr", guardian_mobile_number)
+  
     try {
         await Student.findByIdAndUpdate({ _id: id },
             {
@@ -90,12 +92,12 @@ const updateStudent = async (req, res) => {
                 age,
                 address,
                 guardian_name,
-                guadian_mobile_number,
+                guardian_mobile_number,
                 guardian_relationship,
                 guardian_lastname
             }, { new: true })
 
-        res.status(201).json("Student Updated Successfully")
+        res.status(200).json({ success: true, message: "Student Updated Successfully" })
     } catch (error) {
         console.log(error)
     }
@@ -112,8 +114,8 @@ const getStudentList = async (req, res) => {
         }
 
         const stud = getAllStudent.map((s) => {
-            const date = new Date(s.date_of_birth).toLocaleString("en-US", { timeZone: "Asia/Manila", year: "2-digit", month: 'long', day: "2-digit" })
-            return{
+            const date = new Date(s.date_of_birth).toLocaleString("en-US", { timeZone: "Asia/Manila", year: "numeric", month: 'long', day: "2-digit" })
+            return {
                 ...s,
                 date_of_birth: date
             }
@@ -159,14 +161,16 @@ const getStudentById = async (req, res) => {
 
 // delete student
 const deleteStudent = async (req, res) => {
-    const { studentId } = req.params
+    const { id } = req.params
+    console.log(id)
     try {
-        const delStudent = await Student.findOneAndDelete({ student_id: studentId })
+        const delStudent = await Student.findOneAndDelete({ _id: id })
 
         if (!delStudent) {
             return res.json("Student not found")
         }
         res.json("Student Deleted Successful")
+
     } catch (error) {
         console.log(error)
     }
@@ -198,7 +202,7 @@ const searchStudent = async (req, res) => {
 
         const s = search.map((s) => ({
             ...s,
-            date_of_birth:new Date(s.date_of_birth).toLocaleString("en-US", {timeZone:"Asia/Manila", year:"numeric", day:"numeric", month:"long"})
+            date_of_birth: new Date(s.date_of_birth).toLocaleString("en-US", { timeZone: "Asia/Manila", year: "numeric", day: "numeric", month: "long" })
         }))
 
         res.status(200).json(s)

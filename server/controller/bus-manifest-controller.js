@@ -25,8 +25,18 @@ const getManifestList = async (req, res) => {
     try {
         const getList = await BusManifest.find({})
 
-        console.log(getList)
-        res.json(getList)
+        const students = getList.map(m => {
+            const stud = m.studentList.map(l => l)
+
+            return stud
+
+        }).flat()
+
+        const findStudents = await studentModel.find({ student_id: students.map(s => s) })
+
+        console.log("sdddddddddddd", findStudents)
+
+        res.json({ getList, findStudents })
 
     } catch (error) {
         console.log(error)
@@ -55,10 +65,10 @@ const updateManifest = async (req, res) => {
         const update = await BusManifest.findByIdAndUpdate(id, { busCode, busPlateNumber, busCapacity, busDriverName, email }, { new: true })
         if (!update) {
             // console.log("Manifest not found or invalid ID")
-            res.status(404).json("Manifest not found or invalid ID")
+            res.status(404).json({ message: "Manifest not found or invalid ID" })
             return
         }
-        res.json({ message: "Minfest Updated Successfull", update })
+        res.json({ message: "Bus Minfest Updated Successfull", update })
     } catch (error) {
         console.log(error)
     }
@@ -68,14 +78,15 @@ const updateManifest = async (req, res) => {
 const manifestAddStudent = async (req, res) => {
     const { manifestId } = req.params;
     const { studentId } = req.body;
-    console.log(studentId)
+    console.log("sdsd", studentId)
+
     try {
 
         const findStudent = await studentModel.findOne({ student_id: studentId })
 
         if (!findStudent) {
-            console.log("student not found")
-            res.status(404).json("Student not found")
+            // console.log("student not found")
+            res.status(404).json("Student ID not found")
             return
         }
 
@@ -141,9 +152,32 @@ const busManifestCount = async (req, res) => {
 }
 
 
+// get students list in manifest
+const getStudeList = async (req, res) => {
+    const studentList = req.body.studentList
+
+    try {
+        const findStudents = await studentModel.find()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// bus manifest delete
+const delManifest = async (req, res) => {
+    const { manifestId } = req.params
+    try {
+        const del = await BusManifest.findByIdAndDelete(manifestId)
+        console.log(del)
+        res.status(200).json("Bus Manifest Deleted Successfull")
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     createManifest, getManifestList, getMnifest,
     updateManifest, manifestAddStudent, removeStudentFromManifest,
-    busManifestCount
+    busManifestCount,delManifest
 }

@@ -1,7 +1,7 @@
 const express = require('express')
 const { registerStudent, updateStudent, getStudentList, getStudentById, deleteStudent, studentCount, searchStudent } = require('../controller/student-controller.js')
 const { createUser, loginUser, userListByRole, getUserByEmail, updateUser, deleteUser, changePassoword, forgotPassword } = require('../controller/user-controller.js')
-const { createManifest, getManifestList, getMnifest, updateManifest, manifestAddStudent, removeStudentFromManifest, busManifestCount } = require('../controller/bus-manifest-controller.js')
+const { createManifest, getManifestList, getMnifest, updateManifest, manifestAddStudent, removeStudentFromManifest, busManifestCount, delManifest } = require('../controller/bus-manifest-controller.js')
 const { attendance, todaySAttendance, getAttendance } = require('../controller/attendance-controller.js')
 const test = require('../controller/arduino.js')
 
@@ -16,7 +16,7 @@ router.get("/student/list", getStudentList)
 // get student by student id
 router.get("/student/:studentId", getStudentById)
 // delete student
-router.delete("/student/delete/:studentId", deleteStudent)
+router.delete("/student/delete/:id", deleteStudent)
 // students count
 router.get("/students-count", studentCount)
 // search student
@@ -54,6 +54,8 @@ router.put("/bus-manifest/add-student/:manifestId", manifestAddStudent)
 router.put("/bus-manifest/remove-student/:manifestId", removeStudentFromManifest)
 // bus manifest count
 router.get("/bus-manifest-count", busManifestCount)
+// delete manifest
+router.delete("/bus-manifest/delete/:manifestId", delManifest)
 
 
 // attendance
