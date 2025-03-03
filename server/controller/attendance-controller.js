@@ -151,7 +151,7 @@ const getAttendance = async (req, res) => {
     endDate.setHours(23, 59, 59, 999);
     try {
         const get_attendance = await BusAttendance.findOne({ createdAt: { $gte: startDate, $lt: endDate } })
-        console.log("tessssssssst:", get_attendance)
+        // console.log("tessssssssst:", get_attendance)
 
         if (!get_attendance) {
             return res.status(404).json("No Record")

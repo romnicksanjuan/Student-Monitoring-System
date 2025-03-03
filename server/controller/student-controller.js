@@ -1,8 +1,8 @@
 const Student = require('../model/student-model.js')
 // const say = require("say")
-// const fs = require("fs")
+const fs = require("fs")
 const googleTTS = require('google-tts-api');
-// const axios = require("axios");
+const axios = require("axios");
 // const path = require('path');
 
 const registerStudent = async (req, res) => {
@@ -32,26 +32,20 @@ const registerStudent = async (req, res) => {
         const bye = "Thank You, Good Bye"
         const firstInitial = firstname.charAt(0)
 
-        const ttsUrl = await googleTTS.getAudioBase64(greet + lastname + firstInitial, { lang: "en", slow: false });
-        const base64 = await googleTTS.getAudioBase64(bye + lastname + firstInitial, { lang: "en", slow: false })
+        const ttsUrl_in = googleTTS.getAudioUrl(greet + lastname + firstInitial, { lang: "en", slow: false });
+        const ttsUrl_out = googleTTS.getAudioUrl(bye + lastname + firstInitial, { lang: "en", slow: false })
 
-        const buffer = Buffer.from(base64, "base64")
-        const time_in_buffer = Buffer.from(ttsUrl, "base64")
+        const filename_time_in = "time-in-audio.mp3"
+        const filename_time_out = "time-out-audio.mp3"
 
-        // const time_in_Filepath = "time-in-audio.mp3"
-        // const time_Out_Filepath = "time-out-audio.mp3"
-        // fs.writeFileSync(time_Out_Filepath, buffer)
-        // fs.writeFileSync(time_in_Filepath, time_in_buffer)
+        const time_in = await downloadMP3(ttsUrl_in, filename_time_in)
+        const time_out = await downloadMP3(ttsUrl_out, filename_time_out)
 
 
-        // console.log("Generated TTS URL:", ttsUrl);
-        // console.log(greet, lastname, firstInitial)
+        const time_in_buffer = fs.readFileSync(filename_time_in)
+        const time_out_buffer = fs.readFileSync(filename_time_in)
+        // console.log(time_in_buffer)
 
-        // const tts = await generateTTS(greet, lastname, firstInitial, filepath)
-
-
-
-        // console.log(audioBuffer)
         const newStudent = new Student({
             student_id, email, firstname, lastname, gender, date_of_birth: birth_date, age, strand,
             address, guardian_name, guardian_mobile_number, guardian_relationship,
@@ -61,13 +55,14 @@ const registerStudent = async (req, res) => {
                 contentType: "audio/mp3"
             },
             tts_out: {
-                data: buffer,
+                data: time_out_buffer,
                 contentType: "audio/mp3"
             }
 
         })
         await newStudent.save()
-        // const filepath = "tts.wav";
+        fs.unlinkSync(filename_time_in)
+        fs.unlinkSync(filename_time_out)
         res.status(200).json({ message: "Student Registered Successfull" })
     } catch (error) {
         console.log(error)
@@ -78,8 +73,8 @@ const registerStudent = async (req, res) => {
 const updateStudent = async (req, res) => {
     const { id } = req.params
     const { student_id, email, firstname, lastname, gender, date_of_birth, age, address, guardian_name, guardian_mobile_number, guardian_relationship, guardian_lastname } = req.body
-  console.log("numberrrrr", guardian_mobile_number)
-  
+    console.log("numberrrrr", guardian_mobile_number)
+
     try {
         await Student.findByIdAndUpdate({ _id: id },
             {
@@ -162,7 +157,7 @@ const getStudentById = async (req, res) => {
 // delete student
 const deleteStudent = async (req, res) => {
     const { id } = req.params
-    console.log(id)
+    // console.log(id)
     try {
         const delStudent = await Student.findOneAndDelete({ _id: id })
 
@@ -178,20 +173,20 @@ const deleteStudent = async (req, res) => {
 
 
 // Download MP3 file
-// async function downloadMP3(url, filename) {
-//     const response = await axios({
-//         url,
-//         method: 'GET',
-//         responseType: 'stream',
-//     });
+async function downloadMP3(url, filename) {
+    const response = await axios({
+        url,
+        method: 'GET',
+        responseType: 'stream',
+    });
 
-//     response.data.pipe(fs.createWriteStream(filename));
+    response.data.pipe(fs.createWriteStream(filename));
 
-//     return new Promise((resolve, reject) => {
-//         response.data.on('end', () => resolve(filename));
-//         response.data.on('error', reject);
-//     });
-// }
+    return new Promise((resolve, reject) => {
+        response.data.on('end', () => resolve(filename));
+        response.data.on('error', reject);
+    });
+}
 
 // search student
 const searchStudent = async (req, res) => {
