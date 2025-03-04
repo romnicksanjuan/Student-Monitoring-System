@@ -79,8 +79,8 @@ const registerStudent = async (req, res) => {
 // update student
 const updateStudent = async (req, res) => {
     const { id } = req.params
-    const { student_id, email, firstname, lastname, gender, date_of_birth, age, address, guardian_name, guardian_mobile_number, guardian_relationship, guardian_lastname } = req.body
-    console.log("numberrrrr", guardian_mobile_number)
+    const { student_id, email, firstname, lastname, gender, date_of_birth, age,strand, address, guardian_name, guardian_mobile_number, guardian_relationship, guardian_lastname } = req.body
+    // console.log("numberrrrr", strand)
 
     try {
         await Student.findByIdAndUpdate({ _id: id },
@@ -92,6 +92,7 @@ const updateStudent = async (req, res) => {
                 gender,
                 date_of_birth,
                 age,
+                strand,
                 address,
                 guardian_name,
                 guardian_mobile_number,

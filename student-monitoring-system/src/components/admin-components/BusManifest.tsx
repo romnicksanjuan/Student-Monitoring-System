@@ -13,7 +13,7 @@ interface Manifest {
     busPlateNumber: string;
     email: string;
     _id: string;
-    studentList: string[]
+    studentList: StudList[]
 }
 interface StudList {
     student_id: string;
@@ -49,9 +49,9 @@ const BusManifest = () => {
                     console.log(response.statusText)
                     return
                 }
-                setManifest(data.getList)
-                console.log("stud list:", data.findStudents)
-                setStudList(data.findStudents)
+                setManifest(data.manifest)
+                console.log(data.manifest)
+                // setStudList(data.findStudents)
             } catch (error) {
                 console.log(error)
             }
@@ -66,7 +66,9 @@ const BusManifest = () => {
         setIsClick(!isClick)
         console.log("manifest id:", id)
         const findManifest = manifest.find(man => man._id.toString() === id)
-        console.log(findManifest)
+
+
+        console.log()
         setMan(findManifest ?? null)
     }
 
@@ -108,7 +110,7 @@ const BusManifest = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({studentId})
+                body: JSON.stringify({ studentId })
             })
 
             const data = await response.json()
@@ -121,11 +123,11 @@ const BusManifest = () => {
         }
     }
 
-    const delManifest = async(busId: string) => {
+    const delManifest = async (busId: string) => {
         if (!window.confirm("Are you sure you want to delete this Bus Manifest?")) return
         try {
-            const response = await fetch(`${DOMAIN}/bus-manifest/delete/${busId}`,{
-                method:"DELETE"
+            const response = await fetch(`${DOMAIN}/bus-manifest/delete/${busId}`, {
+                method: "DELETE"
             })
             const data = await response.json()
             setSuccessMessage(data)
@@ -145,7 +147,7 @@ const BusManifest = () => {
       -translate-x-1/2 py-10 px-5 border-2 border-gray-900">
 
                     <button onClick={() => setIsClick(!isClick)} className="font-bold text-2xl absolute right-2 top-1 p-2 cursor-pointer">
-                        <MdCancel size={25}/>
+                        <MdCancel size={25} />
                     </button>
                     {successMessage ? <p className="text-center bg-green-500 rounded-sm py-2 text-white">{successMessage}</p> : ""}
                     {errorMessage ? <p className="text-center bg-red-500 rounded-sm py-2 text-white">{errorMessage}</p> : ""}
@@ -189,8 +191,8 @@ const BusManifest = () => {
                             </thead>
 
                             <tbody>
-                                {studList ?
-                                    studList.map((s) => (
+                                {man ?
+                                    man.studentList.map((s) => (
                                         <tr key={s._id} className="bg-gray-100 cursor-pointer">
                                             <td className="border border-gray-300 px-4 py-2 text-left">{s.student_id}</td>
                                             <td className="border border-gray-300 px-4 py-2 text-left">{s.firstname}</td>
@@ -203,6 +205,7 @@ const BusManifest = () => {
                                     ))
                                     : ""}
                             </tbody>
+
                         </table>
                     </div>
 
@@ -244,7 +247,7 @@ const BusManifest = () => {
                                     <td onClick={() => manifestDetails(bus._id)} className="border border-gray-300 px-4 py-2">{bus.busCapacity}</td>
                                     <td onClick={() => manifestDetails(bus._id)} className="border border-gray-300 px-4 py-2">{bus.email}</td>
                                     <td className=" grid grid-cols-2 gap-1.5 border border-gray-300 px-4 py-2 text-center">
-                                        <button onClick={() => navigate("/update-manifest", {state: bus})} className="w-auto px-3 py-1 border bg-green-500 text-white text-lg rounded-sm">Update</button>
+                                        <button onClick={() => navigate("/update-manifest", { state: bus })} className="w-auto px-3 py-1 border bg-green-500 text-white text-lg rounded-sm">Update</button>
                                         <button onClick={() => delManifest(bus._id)} className="w-auto px-3 py-1 border bg-red-500 text-white text-lg rounded-sm">Delete</button>
                                     </td>
                                 </tr>

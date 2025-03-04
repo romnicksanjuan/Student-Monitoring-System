@@ -23,25 +23,35 @@ const createManifest = async (req, res) => {
 // get bus manifest list
 const getManifestList = async (req, res) => {
     try {
-        const getList = await BusManifest.find({})
+        // Fetch all bus manifests
+        const getList = await BusManifest.find({}).lean();
 
-        const students = getList.map(m => {
-            const stud = m.studentList.map(l => l)
+        const manifest = await Promise.all(getList.map(async (m) => {
+            const studentData = await Promise.all(m.studentList.map(async (id) => {
+                const finds = await studentModel.findOne({ student_id: id })
+                return finds
+            }))
 
-            return stud
 
-        }).flat()
 
-        const findStudents = await studentModel.find({ student_id: students.map(s => s) })
+// console.log("studentData",studentData.filter(s => s !== null))
 
-        // console.log("sdddddddddddd", findStudents)
+            return {
+                ...m,
+                studentList: studentData.filter(s => s !== null)
+            }
+        }))
 
-        res.json({ getList, findStudents })
-
+        // console.log(manifest)
+        // const filteredManifest = manifest.map(m => m.studentList.filter(s => s !== null))
+        res.status(200).json({success: true, manifest})
     } catch (error) {
-        console.log(error)
+        console.error("Error fetching manifest list:", error);
+        res.status(500).json({ error: "Internal Server Error"});
     }
-}
+};
+
+
 
 // get manifest by bus code
 const getMnifest = async (req, res) => {
@@ -167,5 +177,5 @@ const delManifest = async (req, res) => {
 module.exports = {
     createManifest, getManifestList, getMnifest,
     updateManifest, manifestAddStudent, removeStudentFromManifest,
-    busManifestCount,delManifest
+    busManifestCount, delManifest
 }
