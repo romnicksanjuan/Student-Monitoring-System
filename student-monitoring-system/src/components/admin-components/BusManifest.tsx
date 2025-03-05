@@ -13,9 +13,9 @@ interface Manifest {
     busPlateNumber: string;
     email: string;
     _id: string;
-    studentList: StudList[]
+    studentList: studtList[]
 }
-interface StudList {
+interface studtList {
     student_id: string;
     firstname: string,
     lastname: string;
@@ -30,11 +30,13 @@ const BusManifest = () => {
 
     const [man, setMan] = useState<Manifest | null>(null)
     const [isClick, setIsClick] = useState<boolean>(false)
+    const [isTrue,setIstrue] = useState<boolean>(false)
 
     const [manifest, setManifest] = useState<Manifest[]>([])
-    const [studList, setStudList] = useState<StudList[]>()
+    const [studList, setStudList] = useState<studtList[]>()
     const [manifestId, setManifestId] = useState<any>("")
     const [studentId, setStudentId] = useState<any>("")
+    // console.log(studList)
     // console.log(student)
     const [successMessage, setSuccessMessage] = useState<string>("")
     const [errorMessage, setErrorMessage] = useState<string>("")
@@ -45,20 +47,20 @@ const BusManifest = () => {
 
                 const data = await response.json()
 
+                const subData:Manifest[] = data.manifest
                 if (!response.ok) {
                     console.log(response.statusText)
                     return
                 }
-                setManifest(data.manifest)
-                console.log(data.manifest)
-                // setStudList(data.findStudents)
+                setManifest(subData)
+             
             } catch (error) {
                 console.log(error)
             }
         }
 
         getManifest()
-    }, [])
+    }, [isTrue])
 
     // update manifest
     const manifestDetails = (id?: string) => {
@@ -67,10 +69,13 @@ const BusManifest = () => {
         console.log("manifest id:", id)
         const findManifest = manifest.find(man => man._id.toString() === id)
 
-
-        console.log()
+        const list = manifest.find(m => m._id.toString() === id)?.studentList?.map(l => l)
+        console.log(list)
+        setStudList(list)
         setMan(findManifest ?? null)
     }
+
+
 
 
 
@@ -93,7 +98,21 @@ const BusManifest = () => {
                 return;
             }
             console.log(data)
-            setSuccessMessage(data)
+            setSuccessMessage(data.message)
+            // setManifest(prev => [...prev, data])
+            // const check = manifestId === data.update._id
+
+            // const l = data?.update?.studentList?.find((d: any) => d !== undefined); // Ensure d exists
+
+            // console.log("l", l);
+            // if (check) {
+            //    const p = man?.studentList.map(s => s).concat(l)
+            //    setMan((prev) => prev ? { ...prev, studentList: [...prev.studentList, l] } : null);
+
+            //     console.log("p",p)
+            //     setIstrue(!isTrue)
+            // }
+            // setMan(prev => prev.s)
             setErrorMessage("")
         } catch (error) {
             console.log(error)
@@ -117,7 +136,9 @@ const BusManifest = () => {
             setSuccessMessage(data.message)
             setErrorMessage("")
             setStudList(studList?.filter(s => s.student_id !== studentId))
+            // setMan((prev) => prev ? {...prev, studentList: prev.studentList?.filter(l => l.student_id !== studentId)} : null)
             console.log(data)
+            setIstrue(!isTrue)
         } catch (error) {
             console.log(error)
         }
@@ -189,11 +210,10 @@ const BusManifest = () => {
                                     <th className="border border-gray-300 py-2 px-4">Action</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-                                {man ?
-                                    man.studentList.map((s) => (
-                                        <tr key={s._id} className="bg-gray-100 cursor-pointer">
+                                {studList ?
+                                    studList.map((s, index) => (
+                                        <tr key={index} className="bg-gray-100 cursor-pointer">
                                             <td className="border border-gray-300 px-4 py-2 text-left">{s.student_id}</td>
                                             <td className="border border-gray-300 px-4 py-2 text-left">{s.firstname}</td>
                                             <td className="border border-gray-300 px-4 py-2 text-left">{s.lastname}</td>

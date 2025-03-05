@@ -115,7 +115,7 @@ const manifestAddStudent = async (req, res) => {
         );
 
         // console.log(update)
-        res.status(200).json("Student Added Successfull!")
+        res.status(200).json({message: "Student Added Successfull!", update})
     } catch (error) {
         console.log(error)
     }
