@@ -19,7 +19,7 @@ mongoose.connect(MONGO_URI)
 initializeWebSocket(server)
 
 const Domain = "https://student-monitoring-system.vercel.app"
-// const LocalDomain = "http://localhost:5173"
+const LocalDomain = "http://localhost:5173"
 
 app.use(express.json())
 app.use(cors({

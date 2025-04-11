@@ -4,6 +4,7 @@ const studentModel = require("../model/student-model.js")
 const { checkout } = require("../routes/route.js")
 const { smsApi } = require("./smsController.js")
 const { sendAudio } = require("./web-socket.js")
+const { dateAttendace, message } = require('../utils/utils.js')
 
 
 const attendance = async (req, res) => {
@@ -23,6 +24,12 @@ const attendance = async (req, res) => {
                 resToArduino: "Student Not Found",
                 resCode: 404
             })
+            return
+        }
+
+        const findDriver = await busManifest.findOne({ busCode })
+
+        if (!findDriver) {
             return
         }
 
@@ -101,9 +108,10 @@ const attendance = async (req, res) => {
         }
 
         const name = findStudent.firstname + " " + findStudent.lastname
-        console.log("full name:", name)
-        const datee = new Date().toLocaleString("en-US", { timeZone: 'Asia/Manila', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })
-        const message = `Hi Ma'am/Sir, This is to inform you that ${name} has ${isCheckIn ? 'got on' : 'got off'}  the bus on ${datee}`
+        // console.log("full name:", name)
+
+        const date = dateAttendace()
+        const message = message(name, date, isCheckIn, findDriver.busDriverName, findDriver.busPlateNumber)
 
         smsApi(findStudent.guardian_mobile_number, message)
         await attendance.save();

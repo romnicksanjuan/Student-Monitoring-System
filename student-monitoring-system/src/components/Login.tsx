@@ -32,7 +32,7 @@ const Login = () => {
                 return;
             }
             console.log("data", data)
-            localStorage.setItem("token", data.token)
+            localStorage.setItem(" ", data.token)
 
             const decodedToken = decodeToken(data.token)
 

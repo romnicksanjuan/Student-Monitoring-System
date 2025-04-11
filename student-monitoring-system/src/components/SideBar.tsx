@@ -15,18 +15,18 @@ const SideBar = () => {
 
       <ul className="space-y-4">
         <li className="hover:bg-gray-700 p-2 rounded text-xl text-amber-300">
-          <Link to="/admin/dashboard">Dashboard</Link>
+          <Link className="" to="/admin/dashboard">Dashboard</Link>
         </li>
         <li className="hover:bg-gray-700 p-2 rounded text-xl text-amber-300">
-          <Link to="/bus-manifest">Bus Manifest</Link>
+          <Link className="" to="/bus-manifest">Bus Manifest</Link>
         </li>
 
         <li className="hover:bg-gray-700 p-2 rounded  text-xl text-amber-300">
-          <Link to="/attendance">Attendance</Link>
+          <Link to="/attendance">Attendance List</Link>
         </li>
 
         <li className="hover:bg-gray-700 p-2 rounded text-xl text-amber-300">
-          <Link to="/students">Students</Link>
+          <Link to="/students">Student List</Link>
         </li>
 
         <li onClick={() => handleLogout()} className="hover:bg-gray-700 p-2 rounded text-xl text-amber-300">

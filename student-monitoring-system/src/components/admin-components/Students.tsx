@@ -92,10 +92,13 @@ const Students = () => {
   // delete student
   const delStudent = async (id?: string) => {
 
+    if (!window.confirm('Do you want to delete this student?')) {
+      return
+    }
     console.log(id)
     try {
-      const response = await fetch(`${DOMAIN}/student/delete/${id}`,{
-        method:'DELETE'
+      const response = await fetch(`${DOMAIN}/student/delete/${id}`, {
+        method: 'DELETE'
       })
 
       if (!response.ok) {
@@ -112,8 +115,6 @@ const Students = () => {
   }
   return (
     <div className="flex min-h-screen w-full relative">
-
-
       {isClick ?
         <div className="absolute z-10 bg-white w-2xl top-1/2 left-1/2 -translate-y-1/2 rounded-md
       -translate-x-1/2 py-10 px-5 border-2 border-gray-900">
@@ -178,7 +179,7 @@ const Students = () => {
 
           <div className="w-full my-3 flex justify-between">
             <div className="flex gap-3">
-              <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} className="h-10 w-sm pl-2 text-md py-5 rounded-md border-1 border-gray-900" placeholder="Search manifest..." />
+              <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} className="h-10 w-sm pl-2 text-md py-5 rounded-md border-1 border-gray-900" placeholder="Search student..." />
               <button className="h-10 w-25 bg-gray-900 text-md rounded-md text-white" onClick={() => searchStudent()}>Search</button>
             </div>
 
