@@ -110,8 +110,8 @@ const attendance = async (req, res) => {
         const name = findStudent.firstname + " " + findStudent.lastname
         // console.log("full name:", name)
 
-        const date = dateAttendace()
-        const message = message(name, date, isCheckIn, findDriver.busDriverName, findDriver.busPlateNumber)
+        const date = await dateAttendace()
+        const message = await message(name, date, isCheckIn, findDriver.busDriverName, findDriver.busPlateNumber)
 
         smsApi(findStudent.guardian_mobile_number, message)
         await attendance.save();
