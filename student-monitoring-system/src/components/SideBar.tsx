@@ -13,7 +13,7 @@ const SideBar = () => {
     <div className="bg-gray-900 text-white h-screen w-62 p-5">
       <h1 className="text-3xl font-bold my-4 px-2">Side Bar</h1>
 
-      <ul className="space-y-4">
+      <ul className="">
         <li className="hover:bg-gray-700 p-2 rounded text-xl text-amber-300">
           <Link className="" to="/admin/dashboard">Dashboard</Link>
         </li>

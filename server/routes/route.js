@@ -1,9 +1,15 @@
 const express = require('express')
+const multer = require('multer')
 const { registerStudent, updateStudent, getStudentList, getStudentById, deleteStudent, studentCount, searchStudent } = require('../controller/student-controller.js')
 const { createUser, loginUser, userListByRole, getUserByEmail, updateUser, deleteUser, changePassoword, forgotPassword, sendOTPFunction, verifyOtp } = require('../controller/user-controller.js')
 const { createManifest, getManifestList, getMnifest, updateManifest, manifestAddStudent, removeStudentFromManifest, busManifestCount, delManifest } = require('../controller/bus-manifest-controller.js')
 const { attendance, todaySAttendance, getAttendance } = require('../controller/attendance-controller.js')
 const test = require('../controller/arduino.js')
+const { setting } = require('../controller/settingController.js')
+const { middleware } = require('../auth/auth.js')
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const router = express.Router()
 
@@ -31,7 +37,7 @@ router.get("/user/list", userListByRole)
 // get user by email
 router.get("/user/:email", getUserByEmail)
 // update user
-router.put("/user/update/:id", updateUser)
+router.put("/user/update-information/:id", upload.single('profile'), updateUser)
 // delete user
 router.delete("/user/delete/:id", deleteUser)
 // user change password
@@ -40,6 +46,7 @@ router.post("/user/change-password", changePassoword)
 router.post("/forgot-password", forgotPassword)
 // send otp
 router.post('/send-otp', sendOTPFunction)
+// update info
 router.post('/verify-otp', verifyOtp)
 
 
@@ -72,5 +79,8 @@ router.get("/attendance/:date", getAttendance)
 // arduino test
 router.post("/test", test)
 
+
+// setting
+router.get("/setting", middleware, setting)
 
 module.exports = router

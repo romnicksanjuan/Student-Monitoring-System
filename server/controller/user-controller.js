@@ -97,13 +97,37 @@ const getUserByEmail = async (req, res) => {
 // update user
 const updateUser = async (req, res) => {
     const { id } = req.params
-    const { email, firstName, lastName, role } = req.body
+    const {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        date,
+        address
+    } = req.body;
+
+
+
+    const file = req.file
+
+    console.log('file:', file)
     try {
-        if (!email || !firstName || !lastName || !role) {
+        if (!email || !firstName || !lastName) {
             return res.json("all fields are required!")
         }
-        await User.findByIdAndUpdate(id, { email, firstName, lastName, role }, { new: true })
-        res.json("User Updated Successfully")
+
+        await User.findByIdAndUpdate(id, {
+            email, firstName, lastName, phone_number: phoneNumber,
+            date_of_birth: date, address,
+            ...file && {
+                profile: {
+                    data: file.buffer,
+                    contentType: file.mimetype,
+                },
+            },
+        }, { new: true })
+
+        res.json({ success: true, message: "Your Information has been Updated Successfully" })
     } catch (error) {
         console.log(error)
     }
@@ -123,29 +147,30 @@ const deleteUser = async (req, res) => {
 }
 // user change password
 const changePassoword = async (req, res) => {
-    const { email, oldPassword, newPassword } = req.body
+    const { email, oldPassword, newPassword, confirmPassword } = req.body
 
+    console.log(email, oldPassword, newPassword, confirmPassword)
     try {
-        if (!email || !oldPassword || !newPassword) {
-            res.json("all fields are required")
+        if (email === '' || oldPassword === '' || newPassword === '' || confirmPassword === '') {
+            res.status(401).json({ message: "All fields are required" })
             return
         }
         const findEmail = await User.findOne({ email })
 
         if (!findEmail) {
-            res.json("Email is invalid")
+            res.json({ message: "Email is invalid" })
             return
         }
 
         if (findEmail.password !== oldPassword) {
-            res.json("Password is incorrect")
+            res.json({ message: "Password is incorrect" })
             return
         }
 
         findEmail.password = newPassword
         await findEmail.save()
 
-        res.json("User Updated Successfull")
+        res.json({ message: "Password Change Successfull" })
 
     } catch (error) {
         console.log(error)
@@ -207,7 +232,8 @@ const verifyOtp = async (req, res) => {
     res.status(200).json({ success: true, message: 'OTP has been verified successfully.' })
 }
 
-
+// update information
+// const updateInfo
 module.exports = {
     createUser, loginUser, userListByRole, getUserByEmail,
     updateUser, deleteUser, changePassoword, forgotPassword, sendOTPFunction, verifyOtp
