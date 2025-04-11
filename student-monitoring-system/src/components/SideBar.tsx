@@ -29,6 +29,14 @@ const SideBar = () => {
           <Link to="/students">Student List</Link>
         </li>
 
+        <li className="hover:bg-gray-700 p-2 rounded text-xl text-amber-300">
+          <Link to="/help">Help</Link>
+        </li>
+
+        <li className="hover:bg-gray-700 p-2 rounded text-xl text-amber-300">
+          <Link to="/setting">Setting</Link>
+        </li>
+
         <li onClick={() => handleLogout()} className="hover:bg-gray-700 p-2 rounded text-xl text-amber-300">
           <Link to="">Log Out</Link>
         </li>

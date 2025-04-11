@@ -83,6 +83,7 @@ const Login = () => {
                     />
                 </label>
                 <p onClick={() => navigate("/admin/forgot-password")} className="text-md my-2 cursor-pointer">Forgot Password</p>
+                <p className="text-md my-2 cursor-pointer">Dont have account yet? <span onClick={() => navigate("/create-user")} className="text-blue-900">Sign Up</span></p>
                 <button type="submit" className="bg-gray-700 hover:bg-gray-900  text-white p-2 w-full rounded-md cursor-pointer">
                     Submit
                 </button>

@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../model/user-model");
-
+const { sendOtp } = require("../utils/otpSender");
+const Otp = require('../model/otp.js');
+const { message } = require("../utils/utils");
 // create user
 const createUser = async (req, res) => {
     const { firstName, lastName, email, password } = req.body
@@ -150,6 +152,15 @@ const changePassoword = async (req, res) => {
     }
 }
 
+
+// send otp
+const sendOTPFunction = async (req, res) => {
+    const { email } = req.body
+    console.log(email)
+    await sendOtp(email)
+    res.status(200).json({ message: "We've sent you an email containing a One-Time Password (OTP). Please check your inbox to proceed. " });
+}
+
 const forgotPassword = async (req, res) => {
     const { email, newPassword, confirmPassword } = req.body
     console.log(email, newPassword, confirmPassword)
@@ -157,7 +168,7 @@ const forgotPassword = async (req, res) => {
         const findByEmail = await User.findOne({ email })
 
         // console.log(findByEmail)
-        
+
         if (!findByEmail) {
             res.status(404).json("Email not found")
             return
@@ -178,7 +189,26 @@ const forgotPassword = async (req, res) => {
     }
 }
 
+// verify otp
+const verifyOtp = async (req, res) => {
+    const { email, otp } = req.body
+
+    if (!email === '' || otp === '') {
+
+        return console.log('error')
+        // res.status(400).josn({success: false, message: ''})
+    }
+
+    const verify = await Otp.findOne({ email, otp })
+
+    if (!verify) {
+        return res.status(500).json({ success: false, message: 'Cannot Verify OTP' })
+    }
+    res.status(200).json({ success: true, message: 'OTP has been verified successfully.' })
+}
+
+
 module.exports = {
     createUser, loginUser, userListByRole, getUserByEmail,
-    updateUser, deleteUser, changePassoword, forgotPassword
+    updateUser, deleteUser, changePassoword, forgotPassword, sendOTPFunction, verifyOtp
 }

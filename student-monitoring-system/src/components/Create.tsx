@@ -8,6 +8,7 @@ const Create = () => {
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     // const [role, setRole] = useState<string>("")
+   
 
     const [Message, setMessage] = useState<string>("")
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -17,14 +18,14 @@ const Create = () => {
 
         if (firstName === "" || lastName === "" || email === "" || password === "") {
             setErrorMessage("All fields are required!")
-           
+
             return
         }
 
         try {
             const response = await fetch(`${DOMAIN}/user/create`, {
-                method:"POST",
-                headers:{
+                method: "POST",
+                headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ firstName, lastName, email, password })
@@ -33,7 +34,7 @@ const Create = () => {
             if (!response.ok) {
                 setErrorMessage(data.message)
                 setMessage("")
-                console.log("error:",data)
+                console.log("error:", data)
                 return
             }
             console.log(response)
@@ -55,7 +56,7 @@ const Create = () => {
             <form onSubmit={handleSubmit} className="xl:bg-white xl:p-4 xl:border xl:rounded-md xl:w-xl ">
                 {Message ? <p className="xl:text-white xl:text-center xl:bg-green-500 xl:py-2 xl:text-lg">{Message}</p> : ""}
                 {errorMessage ? <p className="xl:text-white xl:text-center xl:bg-red-500 xl:py-2 xl:text-lg">{errorMessage}</p> : ""}
-                <h2 className="xl:text-2xl xl:text-bold xl:text-center">Create User</h2>
+                <h2 className="xl:text-2xl xl:text-bold xl:text-center">Create Admin Account</h2>
                 <label className="block mb-2">
                     FirstName:
                     <input

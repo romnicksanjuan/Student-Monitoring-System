@@ -10,6 +10,8 @@ import BusManifestForm from "./components/admin-components/BusManifestForm"
 import ForgotPassword from "./components/ForgotPassword"
 import UpdateStudent from "./components/admin-components/UpdateStudent"
 import UpdateManifest from "./components/admin-components/UpdateManifest"
+import Setting from "./components/admin-components/Setting"
+import Help from "./components/admin-components/Help"
 
 BusManifest
 
@@ -30,6 +32,8 @@ function App() {
         <Route path="admin/forgot-password" element={<ForgotPassword />}/>
         <Route path="update-student" element={< UpdateStudent />}/>
         <Route path="update-manifest" element={< UpdateManifest />}/>
+        <Route path="setting" element={< Setting />}/>
+        <Route path="help" element={< Help />}/>
       </Routes>
       </BrowserRouter>
     </>
