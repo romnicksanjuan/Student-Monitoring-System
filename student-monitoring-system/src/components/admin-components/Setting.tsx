@@ -158,7 +158,7 @@ const Setting = () => {
                 <div className='bg-amber-400 grid grid-cols-2 gap-4 w-full p-5  rounded-sm'>
                   <div className='flex items-center justify-start gap-4'>
                     <div>
-                      <img src={baseProfile} alt="" className='w-24 h-auto rounded-[50%]' />
+                      <img src={baseProfile || default_profile} alt="" className='w-24 h-auto rounded-[50%]' />
                     </div>
                     <div className=''>
                       <p>{user?.firstName} {user?.lastName}</p>
