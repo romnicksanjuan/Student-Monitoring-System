@@ -5,7 +5,7 @@ const dateAttendace = () => {
     })
 }
 
-const message = (name, date, isCheckIn, busDriver, plateNumber) => {
+const messageFunction = (name, date, isCheckIn, busDriver, plateNumber) => {
     // const message = `Hi Ma'am/Sir, This is to inform you that ${name} has ${isCheckIn ? 'got on' : 'got off'}  the bus on ${date}`
 
     return new Promise((resolve, reject) => {
@@ -15,4 +15,4 @@ const message = (name, date, isCheckIn, busDriver, plateNumber) => {
     })
 }
 
-module.exports = { dateAttendace, message }
+module.exports = { dateAttendace, messageFunction }

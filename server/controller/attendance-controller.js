@@ -4,13 +4,16 @@ const studentModel = require("../model/student-model.js")
 const { checkout } = require("../routes/route.js")
 const { smsApi } = require("./smsController.js")
 const { sendAudio } = require("./web-socket.js")
-const { dateAttendace, message } = require('../utils/utils.js')
+const { dateAttendace, messageFunction } = require('../utils/utils.js')
 
 
 const attendance = async (req, res) => {
-    const { studentId, busCode } = req.body
+    const { studentId, busCode, rfid } = req.body
 
     console.log(studentId, busCode)
+
+    // res.json('bobo')
+    // return
     const currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0);
 
@@ -111,7 +114,9 @@ const attendance = async (req, res) => {
         // console.log("full name:", name)
 
         const date = await dateAttendace()
-        const message = await message(name, date, isCheckIn, findDriver.busDriverName, findDriver.busPlateNumber)
+        const message = await messageFunction(name, date, isCheckIn, findDriver.busDriverName, findDriver.busPlateNumber)
+
+        console.log('message:::', message)
 
         smsApi(findStudent.guardian_mobile_number, message)
         await attendance.save();
@@ -159,7 +164,7 @@ const getAttendance = async (req, res) => {
     endDate.setHours(23, 59, 59, 999);
     try {
         const get_attendance = await BusAttendance.findOne({ createdAt: { $gte: startDate, $lt: endDate } })
-        // console.log("tessssssssst:", get_attendance)
+        console.log("tessssssssst:", get_attendance)
 
         if (!get_attendance) {
             return res.status(404).json("No Record")
@@ -183,7 +188,7 @@ const getAttendance = async (req, res) => {
                 first_name: s.firstname,
                 last_name: s.lastname,
                 time_In: new Date(findStudID.time_In).toLocaleString("en-US", { timeZone: "Asia/Manila", year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric" }),
-                time_Out: new Date(findStudID.time_Out).toLocaleString("en-US", { timeZone: "Asia/Manila", year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric" }),
+                time_Out: findStudID.time_Out === null ? null : new Date(findStudID.time_Out).toLocaleString("en-US", { timeZone: "Asia/Manila", year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric" }),
             }
         })
         // console.log(data)
