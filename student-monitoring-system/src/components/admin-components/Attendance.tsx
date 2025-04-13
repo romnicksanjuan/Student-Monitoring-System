@@ -77,12 +77,12 @@ const Attendance = () => {
           </div>
           <div ref={contentRef} className="">
             <div className="hidden  print:flex justify-center items-center gap-3 mt-1.5">
-              <img className="w-24 h-auto" src={logo} alt="" />
+              <img className="w-16 h-auto" src={logo} alt="" />
               <h2 className="font-bold text-2xl">STUDENT SERVICE ATTENDANCE</h2>
             </div>
 
             <table className="w-full border-collapse border border-gray-300 mt-3 
-            print:w-3xl mx-auto  
+            print:w-3xl mx-auto  print:text-[0.50rem]
             print:mt-6">
               <thead>
                 <tr className="bg-gray-200 cursor-pointer">

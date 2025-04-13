@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import SideBar from "../SideBar";
 import TopBar from "../TopBar";
 import DOMAIN from "../../config/config";
 import { useNavigate } from "react-router-dom";
-import { MdCancel } from "react-icons/md";
+import { MdCancel, MdPrint } from "react-icons/md";
+import { useReactToPrint } from "react-to-print";
+import logo from '../../images/senior-high.png'
 
 interface GetStudents {
   address: string;
@@ -55,6 +57,7 @@ const Students = () => {
     getStudents()
   }, [query])
 
+  let contentRef = useRef(null)
 
   // search student 
   const searchStudent = async () => {
@@ -113,6 +116,15 @@ const Students = () => {
       console.log(error)
     }
   }
+
+  // print 
+  const reactToPrintFn = useReactToPrint({
+    contentRef: contentRef,
+    documentTitle: 'Print', // Optional: name of the printed file
+    // onAfterPrint: () => alert('Print success!'), 
+  });
+
+
   return (
     <div className="flex min-h-screen w-full relative">
       {isClick ?
@@ -188,36 +200,49 @@ const Students = () => {
           </div>
 
           <h2 className="text-xl text-gray-900 font-bold">Student List</h2>
-          <table className="w-full  border-collapse border border-gray-300 mt-3">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="border border-gray-300 px-4 py-2 text-left">Student Id</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Email</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">First Name</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Last Name</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Gender</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Birth Date</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Age</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Strand</th>
-              </tr>
-            </thead>
-            <tbody>
-              {studentList ?
-                studentList.map((student) => (
-                  <tr key={student._id} className="hover:bg-gray-100 cursor-pointer" onClick={() => studentDetails(student._id.toString())}>
-                    <td className="border border-gray-300 px-4 py-2 text-left">{student.student_id}</td>
-                    <td className="border border-gray-300 px-4 py-2 text-left">{student.email}</td>
-                    <td className="border border-gray-300 px-4 py-2 text-left">{student.firstname}</td>
-                    <td className="border border-gray-300 px-4 py-2 text-left">{student.lastname}</td>
-                    <td className="border border-gray-300 px-4 py-2 text-left">{student.gender}</td>
-                    <td className="border border-gray-300 px-4 py-2 text-left">{student.date_of_birth}</td>
-                    <td className="border border-gray-300 px-4 py-2 text-left">{student.age}</td>
-                    <td className="border border-gray-300 px-4 py-2 text-left">{student.strand}</td>
-                  </tr>
-                ))
-                : ""}
-            </tbody>
-          </table>
+          <div onClick={() => reactToPrintFn()}>
+            < MdPrint color="black" size={30} />
+          </div>
+
+          <div ref={contentRef}>
+            <div className="hidden  print:flex justify-center items-center gap-3 mt-1.5">
+              <img className="w-16 h-auto" src={logo} alt="" />
+              <h2 className="font-bold text-xl">STUDENT SERVICE ATTENDANCE</h2>
+            </div>
+
+            <table className="w-full  border-collapse border border-gray-300 mt-3 
+            print:w-[80%] mx-auto print:text-[0.50rem]
+            print:mt-6">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-300 px-4 py-2 text-left">Student Id</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Email</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">First Name</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Last Name</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Gender</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Birth Date</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Age</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Strand</th>
+                </tr>
+              </thead>
+              <tbody>
+                {studentList ?
+                  studentList.map((student) => (
+                    <tr key={student._id} className="hover:bg-gray-100 cursor-pointer" onClick={() => studentDetails(student._id.toString())}>
+                      <td className="border border-gray-300 px-4 py-2 text-left">{student.student_id}</td>
+                      <td className="border border-gray-300 px-4 py-2 text-left">{student.email}</td>
+                      <td className="border border-gray-300 px-4 py-2 text-left">{student.firstname}</td>
+                      <td className="border border-gray-300 px-4 py-2 text-left">{student.lastname}</td>
+                      <td className="border border-gray-300 px-4 py-2 text-left">{student.gender}</td>
+                      <td className="border border-gray-300 px-4 py-2 text-left">{student.date_of_birth}</td>
+                      <td className="border border-gray-300 px-4 py-2 text-left">{student.age}</td>
+                      <td className="border border-gray-300 px-4 py-2 text-left">{student.strand}</td>
+                    </tr>
+                  ))
+                  : ""}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
