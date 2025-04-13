@@ -131,7 +131,15 @@ const Setting = () => {
 
 
   if (!user) {
-    return null
+    return (<div className="flex min-h-screen relative">
+      {/* Sidebar (Fixed Width) */}
+      <SideBar />
+      {/* Main Content (Takes up remaining space) */}
+      <div className="flex-1">
+        <TopBar />
+      </div>
+    </div>)
+
   }
 
   return (
@@ -139,7 +147,7 @@ const Setting = () => {
       {/* Sidebar (Fixed Width) */}
       <SideBar />
       {/* Main Content (Takes up remaining space) */}
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col">
         <TopBar />
         <div className="p-5">
           <h2 className='text-2xl font-bold mb-2'>Settings</h2>
@@ -151,56 +159,57 @@ const Setting = () => {
               <h2 className={`cursor-pointer ${activeSection === 'change-password' ? 'bg-amber-400' : ''} rounded-sm py-1 px-2.5`} onClick={() => handleSection('change-password')}>Change Password</h2>
             </div>
             {/* settings main page */}
-            <div className='bg-gray-300 w-[80%] min-h-[400px] h-[500px] overflow-auto'>
-              {activeSection === 'profile' && <div className='grid gap-2 p-4'>
-                <h2 className='font-bold text-2xl'>Profile Information</h2>
+            <div className='flex-1 bg-gray-300 w-[80%] overflow-auto'>
+              {activeSection === 'profile' &&
+                <div className='flex-1 grid gap-2 p-4'>
+                  <h2 className='font-bold text-2xl'>Profile Information</h2>
 
-                <div className='bg-amber-400 grid grid-cols-2 gap-4 w-full p-5  rounded-sm'>
-                  <div className='flex items-center justify-start gap-4'>
-                    <div>
-                      <img src={baseProfile || default_profile} alt="" className='w-24 h-auto rounded-[50%]' />
-                    </div>
-                    <div className=''>
-                      <p>{user?.firstName} {user?.lastName}</p>
-                      <p>{user?.role}</p>
-                    </div>
-                  </div>
-
-                  <div className='flex items-center justify-center'>
-                    <button className="bg-gray-900 hover:bg-gray-700 text-white p-2 w-24 rounded-md cursor-pointer" onClick={() => setIsEdit(!isEdit)}>Edit Profile</button>
-                  </div>
-                </div>
-
-                <div className='bg-amber-400 flex items-center gap-4 w-full p-5 rounded-sm'>
-                  <div className='grid grid-cols-3 w-full gap-5'>
-                    <div>
-                      <h2>First name: {user?.firstName}</h2>
+                  <div className='bg-amber-400 grid grid-cols-2 gap-4 w-full p-5  rounded-sm'>
+                    <div className='flex items-center justify-start gap-4'>
+                      <div>
+                        <img src={baseProfile || default_profile} alt="" className='w-24 h-auto rounded-[50%]' />
+                      </div>
+                      <div className=''>
+                        <p>{user?.firstName} {user?.lastName}</p>
+                        <p>{user?.role}</p>
+                      </div>
                     </div>
 
-                    <div>
-                      <h2>Last Name: {user?.lastName}</h2>
-                    </div>
-
-                    <div>
-                      <h2>Date of Birth: {date}</h2>
-                    </div>
-
-                    <div>
-                      <h2>Email: {user?.email}</h2>
-                    </div>
-
-                    <div>
-                      <h2>Phone Number: {user.phone_number}</h2>
-                    </div>
-
-                    <div>
-                      <h2>Address: {user.address}</h2>
+                    <div className='flex items-center justify-center'>
+                      <button className="bg-gray-900 hover:bg-gray-700 text-white p-2 w-24 rounded-md cursor-pointer" onClick={() => setIsEdit(!isEdit)}>Edit Profile</button>
                     </div>
                   </div>
 
-                </div>
+                  <div className='flex-1 bg-amber-400  items-center gap-4 w-full p-5 rounded-sm'>
+                    <div className='grid grid-cols-3 w-full gap-5'>
+                      <div>
+                        <h2>First name: {user?.firstName}</h2>
+                      </div>
 
-              </div>}
+                      <div>
+                        <h2>Last Name: {user?.lastName}</h2>
+                      </div>
+
+                      <div>
+                        <h2>Date of Birth: {date}</h2>
+                      </div>
+
+                      <div>
+                        <h2>Email: {user?.email}</h2>
+                      </div>
+
+                      <div>
+                        <h2>Phone Number: {user.phone_number}</h2>
+                      </div>
+
+                      <div>
+                        <h2>Address: {user.address}</h2>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>}
 
               {activeSection === 'change-password' && <ChangePassword />}
 
@@ -222,7 +231,7 @@ const Setting = () => {
           <form onSubmit={handleEditSubmit} className='grid grid-cols-2 w-full gap-3.5'>
 
             <div className='flex justify-center'>
-              <img src={profile ? URL.createObjectURL(profile) : baseProfile} alt="" className='w-24 h-auto rounded-[50%]' />
+              <img src={profile ? URL.createObjectURL(profile) : baseProfile || default_profile} alt="" className='w-24 h-auto rounded-[50%]' />
             </div>
 
             <div>

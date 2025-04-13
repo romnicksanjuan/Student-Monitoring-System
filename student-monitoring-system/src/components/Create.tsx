@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import DOMAIN from "../config/config";
+import { useNavigate } from "react-router-dom";
 
 const Create = () => {
-
+    const navigate = useNavigate()
     const [firstName, setFirstName] = useState<string>("")
     const [lastName, setLastName] = useState<string>("")
     const [email, setEmail] = useState<string>("")
@@ -52,8 +53,9 @@ const Create = () => {
 
 
     return (
-        <div className="h-screen w-full xl:bg-yellow-500 xl:flex xl:justify-center xl:items-center ">
-            <form onSubmit={handleSubmit} className="xl:bg-white xl:p-4 xl:border xl:rounded-md xl:w-xl ">
+        <div className="h-screen w-ful xl:flex xl:justify-center xl:items-center bg-cover bg-center"
+            style={{ backgroundImage: `url(https://thumbs.dreamstime.com/b/whimsical-d-cartoon-school-bus-colorful-city-road-back-to-cute-style-drives-down-street-sign-surroundings-365440818.jpg)` }}>
+            <form onSubmit={handleSubmit} className="xl:bg-white/50 xl:p-4 xl:border-2 border-amber-900 xl:rounded-md xl:w-xl ">
                 {Message ? <p className="xl:text-white xl:text-center xl:bg-green-500 xl:py-2 xl:text-lg">{Message}</p> : ""}
                 {errorMessage ? <p className="xl:text-white xl:text-center xl:bg-red-500 xl:py-2 xl:text-lg">{errorMessage}</p> : ""}
                 <h2 className="xl:text-2xl xl:text-bold xl:text-center">Create Admin Account</h2>
@@ -96,7 +98,7 @@ const Create = () => {
                         className="border p-2 w-full"
                     />
                 </label>
-
+                <p className="text-md my-2 cursor-pointer">Already have an account? <span onClick={() => navigate("/")} className="text-blue-900">Login</span></p>
                 <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded-md">
                     Submit
                 </button>

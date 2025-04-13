@@ -10,7 +10,7 @@ const SideBar = () => {
     navigate("/");
   };
   return (
-    <div className="bg-gray-900 text-white h-screen w-62 p-5">
+    <div className="bg-gray-900 text-white min-h-screen h-auto w-62 p-5">
       <h1 className="text-3xl font-bold my-4 px-2">Side Bar</h1>
 
       <ul className="">

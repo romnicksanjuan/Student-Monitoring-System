@@ -11,8 +11,8 @@ const transporter = nodemailer.createTransport({
     },
     service: 'gmail',
     auth: {
-        user: 'romnicksanjuan22@gmail.com',
-        pass: 'miho qtfh mijo xlts'
+        user: 'sanjuanromnick14@gmail.com',
+        pass: 'qcqg xjwn opiw lzjx'
     }
 });
 
@@ -26,7 +26,7 @@ const sendOtp = async (email) => {
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
     const optionMail = {
-        from: 'romnicksanjuan22@gmail.com',
+        from: 'sanjuanromnick14@gmail.com',
         to: email, // list of receivers
         subject: 'Password Reset OTP', // Subject line
         text: `Hello, We received a request to reset your password. Please use the One-Time Password (OTP) below to proceed with your password change:

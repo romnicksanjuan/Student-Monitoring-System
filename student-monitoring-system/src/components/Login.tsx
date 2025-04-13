@@ -57,8 +57,8 @@ const Login = () => {
 
 
     return (
-        <div className="h-screen w-ful xl:flex xl:justify-center xl:items-center bg-contain bg-center"
-            style={{ backgroundImage: `url(${adminBG})` }}>
+        <div className="h-screen w-ful xl:flex xl:justify-center xl:items-center bg-cover bg-center"
+            style={{ backgroundImage: `url(https://thumbs.dreamstime.com/b/whimsical-d-cartoon-school-bus-colorful-city-road-back-to-cute-style-drives-down-street-sign-surroundings-365440818.jpg)` }}>
             <form onSubmit={handleSubmit} className="xl:bg-white/50 xl:p-4 xl:border-2 border-amber-900 xl:rounded-md xl:w-xl ">
                 <h2 className="xl:text-2xl xl:text-bold xl:text-center">Login User</h2>
                 {errorMessage ? <p className="text-white text-center bg-red-500 py-1 text-lg">{errorMessage}</p> : ""}
