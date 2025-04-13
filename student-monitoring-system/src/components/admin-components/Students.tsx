@@ -199,10 +199,12 @@ const Students = () => {
 
           </div>
 
-          <h2 className="text-xl text-gray-900 font-bold">Student List</h2>
+         <div className="flex gap-3">
+         <h2 className="text-xl text-gray-900 font-bold">Student List</h2>
           <div onClick={() => reactToPrintFn()}>
             < MdPrint color="black" size={30} />
           </div>
+         </div>
 
           <div ref={contentRef}>
             <div className="hidden  print:flex justify-center items-center gap-3 mt-1.5">

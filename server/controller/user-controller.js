@@ -33,12 +33,12 @@ const loginUser = async (req, res) => {
     try {
         const findEmail = await User.findOne({ email })
         if (!findEmail) {
-            res.status(404).json("Email not found")
+            res.status(404).json("Invalid Credentials")
             return;
         }
 
         if (findEmail.password !== password) {
-            res.status(400).json("Incorrect Password")
+            res.status(400).json("Invalid Credentials")
             return
         }
 
@@ -158,12 +158,12 @@ const changePassoword = async (req, res) => {
         const findEmail = await User.findOne({ email })
 
         if (!findEmail) {
-            res.json({ message: "Email is invalid" })
+            res.json({ message: "invalid Credentials" })
             return
         }
 
         if (findEmail.password !== oldPassword) {
-            res.json({ message: "Password is incorrect" })
+            res.json({ message: "invalid Credentials" })
             return
         }
 
@@ -195,7 +195,7 @@ const forgotPassword = async (req, res) => {
         // console.log(findByEmail)
 
         if (!findByEmail) {
-            res.status(404).json("Email not found")
+            res.status(404).json("Invalid Credentials")
             return
         }
 

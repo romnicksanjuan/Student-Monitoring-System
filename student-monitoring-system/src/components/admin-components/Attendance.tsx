@@ -76,38 +76,40 @@ const Attendance = () => {
             </div>
           </div>
           <div ref={contentRef} className="">
-            <div className="hidden  print:flex justify-center items-center gap-3 mt-1.5">
+            <div className="hidden  print:flex justify-center items-center gap-3 mt-1.5 mb-6">
               <img className="w-16 h-auto" src={logo} alt="" />
               <h2 className="font-bold text-2xl">STUDENT SERVICE ATTENDANCE</h2>
             </div>
+            <div className="w-full print:w-[90%] mx-auto" >
+              <h2 className="hidden print:flex print:mb-2 font-bold">Attendance Report</h2>
+              <table className="w-full border-collapse border border-gray-300
+             mx-auto  print:text-[0.50rem]
+            ">
+                <thead>
+                  <tr className="bg-gray-200 cursor-pointer">
+                    <th className="border border-gray-300 px-4 py-2 text-left">Student ID</th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">First Name</th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">Last Name</th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">Time In</th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">Time Out</th>
 
-            <table className="w-full border-collapse border border-gray-300 mt-3 
-            print:w-3xl mx-auto  print:text-[0.50rem]
-            print:mt-6">
-              <thead>
-                <tr className="bg-gray-200 cursor-pointer">
-                  <th className="border border-gray-300 px-4 py-2 text-left">Student ID</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">First Name</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Last Name</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Time In</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Time Out</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {!errorMessage ?
+                    attendance.map((a, index) => (
 
-                </tr>
-              </thead>
-              <tbody>
-                {!errorMessage ?
-                  attendance.map((a, index) => (
-
-                    <tr key={index} className="hover:bg-gray-100">
-                      <td className="border border-gray-300 px-4 py-2 text-left">{a.student_id}</td>
-                      <td className="border border-gray-300 px-4 py-2 text-left">{a.first_name}</td>
-                      <td className="border border-gray-300 px-4 py-2 text-left">{a.last_name}</td>
-                      <td className={`border border-gray-300 px-4 py-2 ${a.time_In ? "text-left" : "text-center"}`}>{a.time_In ? a.time_In : "-"}</td>
-                      <td className={`border border-gray-300 px-4 py-2 ${a.time_Out ? "text-left" : "text-center"}`}>{a.time_Out ? a.time_Out : "-"}</td>
-                    </tr>
-                  )) : <tr><td></td></tr>}
-              </tbody>
-            </table>
+                      <tr key={index} className="hover:bg-gray-100">
+                        <td className="border border-gray-300 px-4 py-2 text-left">{a.student_id}</td>
+                        <td className="border border-gray-300 px-4 py-2 text-left">{a.first_name}</td>
+                        <td className="border border-gray-300 px-4 py-2 text-left">{a.last_name}</td>
+                        <td className={`border border-gray-300 px-4 py-2 ${a.time_In ? "text-left" : "text-center"}`}>{a.time_In ? a.time_In : "-"}</td>
+                        <td className={`border border-gray-300 px-4 py-2 ${a.time_Out ? "text-left" : "text-center"}`}>{a.time_Out ? a.time_Out : "-"}</td>
+                      </tr>
+                    )) : <tr><td></td></tr>}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {errorMessage && <p className="text-lg text-center mt-5">{errorMessage}</p>}
