@@ -69,8 +69,6 @@ const attendance = async (req, res) => {
                 students: [{ studentId, time_In: new Date(), time_Out: null }],
             });
 
-
-
         } else {
             // Check if the student is already in the record
             const studentIndex = attendance.students.findIndex(
@@ -113,10 +111,14 @@ const attendance = async (req, res) => {
         const name = findStudent.firstname + " " + findStudent.lastname
         // console.log("full name:", name)
 
-        const date = await dateAttendace()
+        // const date = await dateAttendace()
+        const date = new Date().toLocaleString("en-US", { timeZone: 'Asia/Manila', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })
+
         const message = await messageFunction(name, date, isCheckIn, findDriver.busDriverName, findDriver.busPlateNumber)
 
         console.log('message:::', message)
+
+       
 
         smsApi(findStudent.guardian_mobile_number, message)
         await attendance.save();

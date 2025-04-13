@@ -29,7 +29,7 @@ const registerStudent = async (req, res) => {
         const birth_date = new Date(date_of_birth).toLocaleString("en-US", { timeZone: 'Asia/Manila', year: "numeric", day: 'numeric', month: 'long' })
         // console.log(birth_date)
         const greet = "Hello, Welcome,";
-        const bye = "Thank You, Good Bye"
+        const bye = "Thank You, Good Bye";
         const firstInitial = firstname.charAt(0)
 
         const ttsUrl_in = googleTTS.getAudioUrl(greet + lastname + firstInitial, { lang: "en", slow: false });
