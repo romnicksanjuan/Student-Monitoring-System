@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import DOMAIN from "../config/config";
 import { useNavigate } from "react-router-dom";
 import { decodeToken } from "./DecodeToken";
-import adminBG from "../images/adminBG.jpg"
+// import adminBG from "../images/adminBG.jpg"
 
 const Login = () => {
     const navigate = useNavigate()
