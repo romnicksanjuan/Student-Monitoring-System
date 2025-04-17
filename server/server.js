@@ -24,7 +24,7 @@ const LocalDomain = "http://localhost:5173"
 app.use(express.json())
 app.use(express.urlencoded({ extended: true, limit: '50mb' }))
 app.use(cors({
-    origin: Domain,
+    origin: LocalDomain,
     methods: ["POST", "GET", "DELETE", "PUT"],
     credentials: true
 }))
