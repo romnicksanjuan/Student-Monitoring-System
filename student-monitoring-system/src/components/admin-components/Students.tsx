@@ -209,7 +209,7 @@ const Students = () => {
           <div ref={contentRef}>
             <div className="hidden  print:flex justify-center items-center gap-3 mt-1.5">
               <img className="w-16 h-auto" src={logo} alt="" />
-              <h2 className="font-bold text-xl">STUDENT SERVICE ATTENDANCE</h2>
+              <h2 className="font-bold text-xl">STUDENT LIST</h2>
             </div>
 
             <table className="w-full  border-collapse border border-gray-300 mt-3 
