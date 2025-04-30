@@ -25,12 +25,14 @@ const sendOtp = async (email) => {
     // send mail with defined transport object
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
+    // console.log(generateOtp())
+    const otp = crypto.randomInt(100000, 999999).toString()
     const optionMail = {
         from: 'sanjuanromnick14@gmail.com',
         to: email, // list of receivers
         subject: 'Password Reset OTP', // Subject line
         text: `Hello, We received a request to reset your password. Please use the One-Time Password (OTP) below to proceed with your password change:
-        OTP: ${generateOtp()}
+        OTP: ${otp}
         
         This OTP is valid for 5 minutes. If you did not request this change, please ignore this email or contact support immediately.`,
     }
@@ -41,7 +43,8 @@ const sendOtp = async (email) => {
             return
         }
     });
-    const neweOTP = new Otp({ email: email, otp: generateOtp(), expiresAt: expiresAt })
+
+    const neweOTP = new Otp({ email: email, otp, expiresAt: expiresAt })
     await neweOTP.save()
 
 
