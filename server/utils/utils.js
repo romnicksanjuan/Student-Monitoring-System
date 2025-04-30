@@ -11,9 +11,9 @@ const messageFunction = (name, date, isCheckIn, busDriver, plateNumber) => {
             return reject('Missing required info.');
         }
 
-        const bool = isCheckIn ? 'board on' : 'board off' 
+        // const bool = isCheckIn ? 'board on' : 'board off' 
         // const message = `Hi Ma'am/Sir, this is to inform you that ${name} has ${bool} the bus on ${date}. Bus Driver: ${busDriver} Bus Plate Number: ${plateNumber}`;
-        const message = `${name} ${bool} the bus on  ${date}, 2025 at 12:52 PM. Driver: ${busDriver}. Plate No:${plateNumber}. —SHS Monitoring Team`
+        const message = `Hi Ma'am/Sir, This is to inform you that ${name} has ${isCheckIn  ? 'board on' : 'board off'} the bus on ${date}`
         resolve(message);
     });
 };
